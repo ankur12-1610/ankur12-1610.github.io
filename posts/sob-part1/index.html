@@ -12,6 +12,7 @@ Specter already has a REST API system, but the authorization is currently done b
 My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:">
 <meta name="author" content="Ankur Patil">
 <link rel="canonical" href="https://ankur12-1610.github.io/posts/sob-part1/">
+<meta name="google-site-verification" content="G-C0Y1VZ254B">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
@@ -28,46 +29,29 @@ My Project I have to use access tokens for the token-based authorization, the ac
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:title" content="Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-C0Y1VZ254B', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22" />
 <meta property="og:description" content="Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
 Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
 My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ankur12-1610.github.io/posts/sob-part1/" /><meta property="og:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://ankur12-1610.github.io/posts/sob-part1/" />
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600&amp;h=840&amp;fit=fill&amp;fill=blur&amp;auto=compress,format&amp;format=webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-07-03T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-07-03T00:00:00+00:00" />
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/>
-
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600&amp;h=840&amp;fit=fill&amp;fill=blur&amp;auto=compress,format&amp;format=webp" />
 <meta name="twitter:title" content="Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22"/>
 <meta name="twitter:description" content="Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
 Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
@@ -104,10 +88,10 @@ My Project I have to use access tokens for the token-based authorization, the ac
   "keywords": [
     "Summer of Bitcoin", "Flask Framework", "Bitcoin", "REST API", "Open Source", "JWT"
   ],
-  "articleBody": " Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.\nSpecter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.\nMy Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:\nI have already used it\nI read their official documentation and got a fan of JWT and its advantages over Simple WebToken (SWT) and Security Assertion Markup Language Tokens (SAML). source\nJWT authentication flow\nExpected Outcomes:\nUser will be able to create a JWT token when the request is sent to a particular endpoint of the api\nOnce the token is generated the user can only see it once and the token needs to be stored somewhere in order to access sessions later on.\nAuthorization will be based on HTTPTokenAuth\nProject Progress Headstart 🚀 At first, when I went through Specter’s codebase it was difficult for me to understand and I was not able to figure out where to make the changes, but thanks to my mentor (k9ert) who helped me sort things out when I was stuck. He suggested making a small FLASK API in a similar structured way as Specter’s API was made. This really helped me understand Flask-RESTful and Flask_HTTPAuth.\nPoC Implementation 📖 Step 1\nThe very first step was to install PyJWT:\npip install PyJWT Next, we need to create a ‘jwt_token’ variable in the UserMixinof src/cryptoadvance/specter/user.py, then we pass it in the user_dict with the help of a property.\nclass User(UserMixin): def __init__( ... jwt_token, ... ): ... self.jwt_token = jwt_token ... # TODO: User obj instantiation belongs in UserManager @classmethod def from_json(cls, user_dict, specter): try: user_args = { ... // Setting default value of jwt_token to None so that it can be stored in the user's data and then later on updated \"jwt_token\": user_dict.get(\"jwt_token\", None), ... } if not user_dict[\"is_admin\"]: user_args[\"config\"] = user_dict[\"config\"] return cls(**user_args) else: user_args[\"is_admin\"] = True return cls(**user_args) except Exception as e: handle_exception(e) raise SpecterError(f\"Unable to parse user JSON.:{e}\") @property def json(self): user_dict = { ... \"jwt_token\": self.jwt_token, ... } if not self.is_admin: user_dict[\"config\"] = self.config return user_dict We also need to add helper functions in order to fetch and delete the token:\ndef save_jwt_token(self, jwt_token): self.jwt_token = jwt_token self.save_info() def delete_jwt_token( self, ): self.jwt_token = None self.save_info() Step 2\nThis step includes the creation of token based endpoints in the API. For this I created a new file namely jwt.py in the rest directory.\nDirectory tree\nimport jwt from flask import current_app as app from cryptoadvance.specter.api.rest.base import ( BaseResource, rest_resource, AdminResource, ) import uuid import datetime import logging from ...user import * from .base import * from .. import auth logger = logging.getLogger(__name__) def generate_jwt(user): payload = { \"user\": user.username, \"exp\": datetime.datetime.utcnow() + datetime.timedelta(days=1), } return jwt.encode(payload, app.config[\"SECRET_KEY\"], algorithm=\"HS256\") @rest_resource class TokenResource(AdminResource): endpoints = [\"/v1alpha/token/\"] def get(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token return_dict = { \"username\": user_details.username, \"id\": user_details.id, \"jwt_token\": jwt_token, } if jwt_token is None: return_dict[\"jwt_token\"] = generate_jwt(user_details) jwt_token = return_dict[\"jwt_token\"] user_details.save_jwt_token(jwt_token) return { \"message\": \"Token generated\", \"username\": user_details.username, \"jwt_token\": jwt_token, } return {\"message\": \"Token already exists\", \"jwt_token\": jwt_token} def delete(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token if jwt_token is None: return {\"message\": \"Token does not exist\"} user_details.delete_jwt_token() return {\"message\": \"Token deleted\"} This basically includes the function generate_jwt which takes user as an argument and generates the token with the payload as user.username and the expiry date of the token (exp).\nThen we have two endpoints - GET and DELETE which receive data from the User model using user_manager by passing the authenticated user.\nGET request functionality\nDELETE request functionality\nLast Step\nThe last step is to register the endpoints in the API, this can be done by adding:\nfrom .jwt import TokenResource in src/cryptoadvance/specter/api/rest/api.py\nPR related to this project https://github.com/cryptoadvance/specter-desktop/pull/1785\nDemo of the implemented PoC:\nFuture milestones\nThe plans for the rest of my journey are:\nAdding a verfiy_token function that verifies if the given token is correct or not.\nReplacing HTTPBasicAuth with HTTPTokenAuth\nAdd one-time view functionality for the users.\nConclusion Thank you for reading, hope you enjoyed it! I’ll continue to update my progress via the series of blogs ;)\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
+  "articleBody": "Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.\nSpecter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.\nMy Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:\nI have already used it\nI read their official documentation and got a fan of JWT and its advantages over Simple WebToken (SWT) and Security Assertion Markup Language Tokens (SAML). source\nJWT authentication flow\nExpected Outcomes:\nUser will be able to create a JWT token when the request is sent to a particular endpoint of the api\nOnce the token is generated the user can only see it once and the token needs to be stored somewhere in order to access sessions later on.\nAuthorization will be based on HTTPTokenAuth\nProject Progress Headstart 🚀 At first, when I went through Specter’s codebase it was difficult for me to understand and I was not able to figure out where to make the changes, but thanks to my mentor (k9ert) who helped me sort things out when I was stuck. He suggested making a small FLASK API in a similar structured way as Specter’s API was made. This really helped me understand Flask-RESTful and Flask_HTTPAuth.\nPoC Implementation 📖 Step 1\nThe very first step was to install PyJWT:\npip install PyJWT Next, we need to create a ‘jwt_token’ variable in the UserMixinof src/cryptoadvance/specter/user.py, then we pass it in the user_dict with the help of a property.\nclass User(UserMixin): def __init__( ... jwt_token, ... ): ... self.jwt_token = jwt_token ... # TODO: User obj instantiation belongs in UserManager @classmethod def from_json(cls, user_dict, specter): try: user_args = { ... // Setting default value of jwt_token to None so that it can be stored in the user's data and then later on updated \"jwt_token\": user_dict.get(\"jwt_token\", None), ... } if not user_dict[\"is_admin\"]: user_args[\"config\"] = user_dict[\"config\"] return cls(**user_args) else: user_args[\"is_admin\"] = True return cls(**user_args) except Exception as e: handle_exception(e) raise SpecterError(f\"Unable to parse user JSON.:{e}\") @property def json(self): user_dict = { ... \"jwt_token\": self.jwt_token, ... } if not self.is_admin: user_dict[\"config\"] = self.config return user_dict We also need to add helper functions in order to fetch and delete the token:\ndef save_jwt_token(self, jwt_token): self.jwt_token = jwt_token self.save_info() def delete_jwt_token( self, ): self.jwt_token = None self.save_info() Step 2\nThis step includes the creation of token based endpoints in the API. For this I created a new file namely jwt.py in the rest directory.\nDirectory tree\nimport jwt from flask import current_app as app from cryptoadvance.specter.api.rest.base import ( BaseResource, rest_resource, AdminResource, ) import uuid import datetime import logging from ...user import * from .base import * from .. import auth logger = logging.getLogger(__name__) def generate_jwt(user): payload = { \"user\": user.username, \"exp\": datetime.datetime.utcnow() + datetime.timedelta(days=1), } return jwt.encode(payload, app.config[\"SECRET_KEY\"], algorithm=\"HS256\") @rest_resource class TokenResource(AdminResource): endpoints = [\"/v1alpha/token/\"] def get(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token return_dict = { \"username\": user_details.username, \"id\": user_details.id, \"jwt_token\": jwt_token, } if jwt_token is None: return_dict[\"jwt_token\"] = generate_jwt(user_details) jwt_token = return_dict[\"jwt_token\"] user_details.save_jwt_token(jwt_token) return { \"message\": \"Token generated\", \"username\": user_details.username, \"jwt_token\": jwt_token, } return {\"message\": \"Token already exists\", \"jwt_token\": jwt_token} def delete(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token if jwt_token is None: return {\"message\": \"Token does not exist\"} user_details.delete_jwt_token() return {\"message\": \"Token deleted\"} This basically includes the function generate_jwt which takes user as an argument and generates the token with the payload as user.username and the expiry date of the token (exp).\nThen we have two endpoints - GET and DELETE which receive data from the User model using user_manager by passing the authenticated user.\nGET request functionality\nDELETE request functionality\nLast Step\nThe last step is to register the endpoints in the API, this can be done by adding:\nfrom .jwt import TokenResource in src/cryptoadvance/specter/api/rest/api.py\nPR related to this project https://github.com/cryptoadvance/specter-desktop/pull/1785\nDemo of the implemented PoC:\nFuture milestones\nThe plans for the rest of my journey are:\nAdding a verfiy_token function that verifies if the given token is correct or not.\nReplacing HTTPBasicAuth with HTTPTokenAuth\nAdd one-time view functionality for the users.\nConclusion Thank you for reading, hope you enjoyed it! I’ll continue to update my progress via the series of blogs ;)\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
   "wordCount" : "747",
   "inLanguage": "en",
-  "datePublished": "2022-07-03T00:00:00Z",
+  "image":"https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600\u0026h=840\u0026fit=fill\u0026fill=blur\u0026auto=compress,format\u0026format=webp","datePublished": "2022-07-03T00:00:00Z",
   "dateModified": "2022-07-03T00:00:00Z",
   "author":{
     "@type": "Person",
@@ -129,14 +113,10 @@ My Project I have to use access tokens for the token-based authorization, the ac
 </script>
 </head>
 
-<body class="" id="top">
+<body class=" dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -190,6 +170,16 @@ My Project I have to use access tokens for the token-based authorization, the ac
                 </a>
             </li>
             <li>
+                <a href="https://ankur12-1610.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
                     <span>Resume</span>&nbsp;
                     <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
@@ -211,10 +201,13 @@ My Project I have to use access tokens for the token-based authorization, the ac
     <h1 class="post-title entry-hint-parent">
       Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22
     </h1>
-    <div class="post-meta"><span title='2022-07-03 00:00:00 +0000 UTC'>July 3, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/sob-part1/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+    <div class="post-meta"><span title='2022-07-03 00:00:00 +0000 UTC'>July 3, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/ankur12-1610/hugo-ankur12-1610/tree/main/content//posts/sob-part1/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
 
 </div>
-  </header> <div class="toc">
+  </header> 
+<figure class="entry-cover"><img loading="eager" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600&amp;h=840&amp;fit=fill&amp;fill=blur&amp;auto=compress,format&amp;format=webp" alt="sob-part1">
+        
+</figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
             <span class="details">Table of Contents</span>
@@ -241,9 +234,7 @@ My Project I have to use access tokens for the token-based authorization, the ac
     </details>
 </div>
 
-  <div class="post-content"><p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600&amp;h=840&amp;fit=fill&amp;fill=blur&amp;auto=compress,format&amp;format=webp" alt=""  />
-</p>
-<h3 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h3>
+  <div class="post-content"><h3 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h3>
 <p><a href="https://github.com/cryptoadvance/specter-desktop">Specter Desktop</a> is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.</p>
 <p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656859075053/CpG22i_7I.png" alt="specter.png"  />
 </p>

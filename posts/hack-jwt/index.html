@@ -11,6 +11,7 @@
 JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret with the HMAC algorithm.">
 <meta name="author" content="Ankur Patil">
 <link rel="canonical" href="https://ankur12-1610.github.io/posts/hack-jwt/">
+<meta name="google-site-verification" content="G-C0Y1VZ254B">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
@@ -27,35 +28,18 @@ JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a 
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:title" content="Hacking JWT Tokens: By Bruteforcing Weak Signing Key" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-C0Y1VZ254B', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Hacking JWT Tokens: By Bruteforcing Weak Signing Key" />
 <meta property="og:description" content="This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key!
 JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret with the HMAC algorithm." />
 <meta property="og:type" content="article" />
@@ -126,14 +110,10 @@ JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a 
 </script>
 </head>
 
-<body class="" id="top">
+<body class=" dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -187,6 +167,16 @@ JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a 
                 </a>
             </li>
             <li>
+                <a href="https://ankur12-1610.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
                     <span>Resume</span>&nbsp;
                     <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
@@ -208,7 +198,7 @@ JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a 
     <h1 class="post-title entry-hint-parent">
       Hacking JWT Tokens: By Bruteforcing Weak Signing Key
     </h1>
-    <div class="post-meta"><span title='2024-01-02 00:00:00 +0000 UTC'>January 2, 2024</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/hack-jwt/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+    <div class="post-meta"><span title='2024-01-02 00:00:00 +0000 UTC'>January 2, 2024</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/ankur12-1610/hugo-ankur12-1610/tree/main/content//posts/hack-jwt/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
 
 </div>
   </header> <div class="toc">

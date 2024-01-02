@@ -11,6 +11,7 @@
 One way to do this is to show your visitors nerdy stats like how much coding you&rsquo;ve been doing, what languages you have been working on and how productive you&rsquo;ve been for the past few days.">
 <meta name="author" content="Ankur Patil">
 <link rel="canonical" href="https://ankur12-1610.github.io/posts/wakatime-stats/">
+<meta name="google-site-verification" content="G-C0Y1VZ254B">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
@@ -27,45 +28,28 @@ One way to do this is to show your visitors nerdy stats like how much coding you
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:title" content="Showing off your Dev Metrics on your Github Readme profile using WakaTime" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-C0Y1VZ254B', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Showing off your Dev Metrics on your Github Readme profile using WakaTime" />
 <meta property="og:description" content="Your profile page tells people the story of your work through the repositories you&rsquo;re interested in, the contributions you&rsquo;ve made, and the conversations you&rsquo;ve had. So, you should put an effort into making your profile stand out.
 One way to do this is to show your visitors nerdy stats like how much coding you&rsquo;ve been doing, what languages you have been working on and how productive you&rsquo;ve been for the past few days." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ankur12-1610.github.io/posts/wakatime-stats/" /><meta property="og:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://ankur12-1610.github.io/posts/wakatime-stats/" />
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1640528550235/D91dLLqSr.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-12-26T00:00:00+00:00" />
 <meta property="article:modified_time" content="2021-12-26T00:00:00+00:00" />
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/>
-
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1640528550235/D91dLLqSr.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" />
 <meta name="twitter:title" content="Showing off your Dev Metrics on your Github Readme profile using WakaTime"/>
 <meta name="twitter:description" content="Your profile page tells people the story of your work through the repositories you&rsquo;re interested in, the contributions you&rsquo;ve made, and the conversations you&rsquo;ve had. So, you should put an effort into making your profile stand out.
 One way to do this is to show your visitors nerdy stats like how much coding you&rsquo;ve been doing, what languages you have been working on and how productive you&rsquo;ve been for the past few days."/>
@@ -104,7 +88,7 @@ One way to do this is to show your visitors nerdy stats like how much coding you
   "articleBody": " Your profile page tells people the story of your work through the repositories you’re interested in, the contributions you’ve made, and the conversations you’ve had. So, you should put an effort into making your profile stand out.\nOne way to do this is to show your visitors nerdy stats like how much coding you’ve been doing, what languages you have been working on and how productive you’ve been for the past few days. You can take a look at the screenshot of my Github profile, amazing isn’t it.\nPrerequisites: A Github account\nA Github profile README (don’t have one, follow docs to create one)\nA WakaTime account (set it up here )\nSteps: To start with, edit your README.md of your Github profile, your repo will be username/username and insert: wherever you want your code stats to appear.\nNext step is to get your WakaTime API Key from your “Account Settings” in WakaTime, as shown below:\n![wakatimekey.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1640522009208/8ymf9MgY-.png align=“left”)\nNext, you’ll need to install the WakaTime plugin for your favourite IDE. Look into this page to get information about various plugins for different IDEs. In my case, I prefer VS Code so I installed its VS Code plugin. To set up WakaTime with VS Code visit: https://wakatime.com/vs-code\nNow, head back to your Github repo, go to the “Settings” tab and then “Secrets”. Create a new Actions Secret (not an environment one). The name of this secret must be WAKATIME_API_KEY and the value should be the API key obtained in the previous step.\n![secrets.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1640522681567/q05f_0jqv.png align=“left”)\nNext, create a GitHub workflow with name and directory as specified: .github/workflows/waka.yml. And paste the following code in the newly created workflow:\nname: Waka Readme on: schedule: # Runs every 4 hours - cron: '0 */4 * * *' workflow_dispatch: jobs: update-readme: name: Update Readme with Metrics runs-on: ubuntu-latest steps: - uses: anmol098/waka-readme-stats@master with: WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }} SHOW_OS: \"True\" SHOW_PROJECTS: \"True\" SHOW_PROFILE_VIEWS: \"False\" SHOW_EDITORS: \"False\" SHOW_LANGUAGE_PER_REPO: \"True\" SHOW_LOC_CHART: \"False\" SHOW_LINES_OF_CODE: \"True\" SHOW_SHORT_INFO: \"False\" The job runs every 4 hours, in order to make some adjustments, visit: https://crontab.guru.\nNote: It takes time for your stats to appear, you need to log enough time in WakaTime, and give it enough data to actually report.\nConclusion: Thank you for reading, hope you enjoyed the article! Queries and feedback are most welcome :) kindly leave them below.\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
   "wordCount" : "414",
   "inLanguage": "en",
-  "datePublished": "2021-12-26T00:00:00Z",
+  "image":"https://cdn.hashnode.com/res/hashnode/image/upload/v1640528550235/D91dLLqSr.png?w=1600\u0026h=840\u0026fit=crop\u0026crop=entropy\u0026auto=compress,format\u0026format=webp","datePublished": "2021-12-26T00:00:00Z",
   "dateModified": "2021-12-26T00:00:00Z",
   "author":{
     "@type": "Person",
@@ -126,14 +110,10 @@ One way to do this is to show your visitors nerdy stats like how much coding you
 </script>
 </head>
 
-<body class="" id="top">
+<body class=" dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -187,6 +167,16 @@ One way to do this is to show your visitors nerdy stats like how much coding you
                 </a>
             </li>
             <li>
+                <a href="https://ankur12-1610.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
                     <span>Resume</span>&nbsp;
                     <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
@@ -208,10 +198,13 @@ One way to do this is to show your visitors nerdy stats like how much coding you
     <h1 class="post-title entry-hint-parent">
       Showing off your Dev Metrics on your Github Readme profile using WakaTime
     </h1>
-    <div class="post-meta"><span title='2021-12-26 00:00:00 +0000 UTC'>December 26, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/wakatime-stats/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+    <div class="post-meta"><span title='2021-12-26 00:00:00 +0000 UTC'>December 26, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/ankur12-1610/hugo-ankur12-1610/tree/main/content//posts/wakatime-stats/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
 
 </div>
-  </header> <div class="toc">
+  </header> 
+<figure class="entry-cover"><img loading="eager" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1640528550235/D91dLLqSr.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" alt="waka-readme">
+        
+</figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
             <span class="details">Table of Contents</span>

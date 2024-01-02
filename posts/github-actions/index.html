@@ -11,6 +11,7 @@
 &ldquo;Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you&rsquo;d like, including CI/CD, and combine actions in a completely customized workflow.&rdquo; - Github Docs">
 <meta name="author" content="Ankur Patil">
 <link rel="canonical" href="https://ankur12-1610.github.io/posts/github-actions/">
+<meta name="google-site-verification" content="G-C0Y1VZ254B">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
@@ -27,45 +28,28 @@
         }
 
     </style>
-    <style>
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --theme: rgb(29, 30, 32);
-                --entry: rgb(46, 46, 51);
-                --primary: rgb(218, 218, 219);
-                --secondary: rgb(155, 156, 157);
-                --tertiary: rgb(65, 66, 68);
-                --content: rgb(196, 196, 197);
-                --code-block-bg: rgb(46, 46, 51);
-                --code-bg: rgb(55, 56, 62);
-                --border: rgb(51, 51, 51);
-            }
-
-            .list {
-                background: var(--theme);
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-track {
-                background: 0 0;
-            }
-
-            .list:not(.dark)::-webkit-scrollbar-thumb {
-                border-color: var(--theme);
-            }
-        }
-
-    </style>
-</noscript><meta property="og:title" content="Build your own Github Action and publish to the Github Marketplace!" />
+</noscript>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-C0Y1VZ254B', { 'anonymize_ip': false });
+}
+</script>
+<meta property="og:title" content="Build your own Github Action and publish to the Github Marketplace!" />
 <meta property="og:description" content="Introduction: Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.
 &ldquo;Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you&rsquo;d like, including CI/CD, and combine actions in a completely customized workflow.&rdquo; - Github Docs" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ankur12-1610.github.io/posts/github-actions/" /><meta property="og:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://ankur12-1610.github.io/posts/github-actions/" />
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643109105478/H-HnvafL8.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-01-25T00:00:00+00:00" />
 <meta property="article:modified_time" content="2022-01-25T00:00:00+00:00" />
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/>
-
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643109105478/H-HnvafL8.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" />
 <meta name="twitter:title" content="Build your own Github Action and publish to the Github Marketplace!"/>
 <meta name="twitter:description" content="Introduction: Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.
 &ldquo;Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you&rsquo;d like, including CI/CD, and combine actions in a completely customized workflow.&rdquo; - Github Docs"/>
@@ -101,10 +85,10 @@
   "keywords": [
     "github-actions", "github", "automation"
   ],
-  "articleBody": " Introduction: Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.\n“Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you’d like, including CI/CD, and combine actions in a completely customized workflow.” - Github Docs\nWe all use Github Actions for code analysis, adding awesome Readme features and doing many other things. When I was first introduced to Github Actions I was dumbstruck and from then onwards it became my favorite section to explore. I started exploring it, used it in my profile Readme and it was really awesome.\nBut the problem was I was using the products which were created by others and it kind of hurt me😅. So I was like - “Let’s create a Github Action on own and then publish it in the marketplace so that others can use it”. And guess what I did, you can check it on Github. In this blog we are going to make a Github Action so tighten your seat belt, it’ll be fun.\nPrerequisites: A Github account Steps: Create a Github repository with a license (any, I’ve used MIT License).\nClone the repo to your local machine and open it in your favorite IDE.\nSetup a node project with:\nnpm init and install all the required packages by following commands:\nnpm i @actions/core npm i @actions/exec npm i @actions/github npm i @vercel/ncc @vercel/ncc is a Simple CLI for compiling a Node.js module into a single file.\nAfter installing packages make sure to add this script in package.json: \"scripts\": { \"build\": \"ncc build src/main.js -o dist\" } This script is important as it runs @vercel/ncc which compiles all the files to a single file dist/index.js.\nNow, we create an action.yml file in our repository. The action.yml is the metadata file and defines the inputs, outputs, and main entry point for our Action. The action.yml file has to include:\nname: The name of your Github Action.\ndescription: A short description of what your action is doing.\nauthor: The name of the author who created this Github Action.\ninputs: The input parameters which you can pass into your script.\nruns: Defines what the action will execute (in our case, it’ll run docker).\nbranding: How your Github Action will look like when it is launched in the marketplace.\nThe action.yml file will look like-\nname: Demo Issue Action 🛰 description: Comments on the newly opened issue. author: ankur12-1610 inputs: GITHUB_TOKEN: description: Github token required: true ISSUE_COMMENT: description: Comment to be added on opening an issue required: true branding: color: blue icon: tag runs: using: 'docker' image: 'Dockerfile' Now, create a folder namely src and in that create a file main.js. This file includes the main script of the action, it is like the brain of the action.\nIn our case, we are creating a Github Action which will comment on every issue created. For this, we need @octokit/rest npm package. It is the GitHub REST API client for JavaScript.\nFor its API endpoints and other details go through its official docs.\nSo my main.js will look like this: const core = require('@actions/core') const github = require('@actions/github') export async function run() { try { const { context } = require('@actions/github') //taking input from the core const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN') const ISSUE_COMMENT = core.getInput('ISSUE_COMMENT') if ( typeof GITHUB_TOKEN !== 'string' ) { throw new Error('Invalid GITHUB_TOKEN: did you forget to set it in your action config?'); } if ( typeof ISSUE_COMMENT !== 'string') { throw new Error('Invalid ISSUE_COMMENT field, it should be a string field') } const octokit = github.getOctokit(GITHUB_TOKEN) const { issue } = context.payload const payload = context.payload.issue //comment on issue await octokit.rest.issues.createComment({ ...context.repo, issue_number: issue.number, body: ISSUE_COMMENT, }) } catch (e) { core.error(e) core.setFailed(e.message) } } run() The last step would be to create a file namely Dockerfile. If you are not familiar with Docker and Dockerfiles, check out Dockerfile support for GitHub Actions.\nThe Dockerfile will look like:\nFROM node:latest COPY . . RUN npm install --production ENTRYPOINT [\"node\", \"/dist/index.js\"] That’s it. We’ve created our won Github Action. Now to test it, create a workflow file in .github/workflows and this code:\nname: 'Demo Issue Action 🛰' on: issues: types: - opened jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v2 - name: 🔃 Install run: | yarn - name: 🧱 Build run: | yarn build - uses: ./ with: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} ISSUE_COMMENT: 'thanks for raising the issue' How others can use my Action?: The answer is simple just paste the following code in the .github/workflows directory in required repo:\nname: 'Demo Issue Action 🛰' on: issues: types: - opened jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v2 - uses: ankur12-1610/demo-action@main with: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} ISSUE_COMMENT: 'thanks for raising the issue' #enter custom message And now we are all perfect to launch it in the Github Marketplace.\nPublish the Action to the Marketplace: Go into the the New Release section and you will find this window:\nCreate new release tag, give release heading to the Action and publish it ;)\nFinally, we can find it on https://github.com/marketplace by searching “Demo Issue Action 🛰”. Conclusion: Thank you for reading, hope you enjoyed the article! Queries and feedback are most welcome :) kindly leave them below.\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
+  "articleBody": "Introduction: Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.\n“Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you’d like, including CI/CD, and combine actions in a completely customized workflow.” - Github Docs\nWe all use Github Actions for code analysis, adding awesome Readme features and doing many other things. When I was first introduced to Github Actions I was dumbstruck and from then onwards it became my favorite section to explore. I started exploring it, used it in my profile Readme and it was really awesome.\nBut the problem was I was using the products which were created by others and it kind of hurt me😅. So I was like - “Let’s create a Github Action on own and then publish it in the marketplace so that others can use it”. And guess what I did, you can check it on Github. In this blog we are going to make a Github Action so tighten your seat belt, it’ll be fun.\nPrerequisites: A Github account Steps: Create a Github repository with a license (any, I’ve used MIT License).\nClone the repo to your local machine and open it in your favorite IDE.\nSetup a node project with:\nnpm init and install all the required packages by following commands:\nnpm i @actions/core npm i @actions/exec npm i @actions/github npm i @vercel/ncc @vercel/ncc is a Simple CLI for compiling a Node.js module into a single file.\nAfter installing packages make sure to add this script in package.json: \"scripts\": { \"build\": \"ncc build src/main.js -o dist\" } This script is important as it runs @vercel/ncc which compiles all the files to a single file dist/index.js.\nNow, we create an action.yml file in our repository. The action.yml is the metadata file and defines the inputs, outputs, and main entry point for our Action. The action.yml file has to include:\nname: The name of your Github Action.\ndescription: A short description of what your action is doing.\nauthor: The name of the author who created this Github Action.\ninputs: The input parameters which you can pass into your script.\nruns: Defines what the action will execute (in our case, it’ll run docker).\nbranding: How your Github Action will look like when it is launched in the marketplace.\nThe action.yml file will look like-\nname: Demo Issue Action 🛰 description: Comments on the newly opened issue. author: ankur12-1610 inputs: GITHUB_TOKEN: description: Github token required: true ISSUE_COMMENT: description: Comment to be added on opening an issue required: true branding: color: blue icon: tag runs: using: 'docker' image: 'Dockerfile' Now, create a folder namely src and in that create a file main.js. This file includes the main script of the action, it is like the brain of the action.\nIn our case, we are creating a Github Action which will comment on every issue created. For this, we need @octokit/rest npm package. It is the GitHub REST API client for JavaScript.\nFor its API endpoints and other details go through its official docs.\nSo my main.js will look like this: const core = require('@actions/core') const github = require('@actions/github') export async function run() { try { const { context } = require('@actions/github') //taking input from the core const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN') const ISSUE_COMMENT = core.getInput('ISSUE_COMMENT') if ( typeof GITHUB_TOKEN !== 'string' ) { throw new Error('Invalid GITHUB_TOKEN: did you forget to set it in your action config?'); } if ( typeof ISSUE_COMMENT !== 'string') { throw new Error('Invalid ISSUE_COMMENT field, it should be a string field') } const octokit = github.getOctokit(GITHUB_TOKEN) const { issue } = context.payload const payload = context.payload.issue //comment on issue await octokit.rest.issues.createComment({ ...context.repo, issue_number: issue.number, body: ISSUE_COMMENT, }) } catch (e) { core.error(e) core.setFailed(e.message) } } run() The last step would be to create a file namely Dockerfile. If you are not familiar with Docker and Dockerfiles, check out Dockerfile support for GitHub Actions.\nThe Dockerfile will look like:\nFROM node:latest COPY . . RUN npm install --production ENTRYPOINT [\"node\", \"/dist/index.js\"] That’s it. We’ve created our won Github Action. Now to test it, create a workflow file in .github/workflows and this code:\nname: 'Demo Issue Action 🛰' on: issues: types: - opened jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v2 - name: 🔃 Install run: | yarn - name: 🧱 Build run: | yarn build - uses: ./ with: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} ISSUE_COMMENT: 'thanks for raising the issue' How others can use my Action?: The answer is simple just paste the following code in the .github/workflows directory in required repo:\nname: 'Demo Issue Action 🛰' on: issues: types: - opened jobs: test: runs-on: ubuntu-latest steps: - uses: actions/checkout@v2 - uses: ankur12-1610/demo-action@main with: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} ISSUE_COMMENT: 'thanks for raising the issue' #enter custom message And now we are all perfect to launch it in the Github Marketplace.\nPublish the Action to the Marketplace: Go into the the New Release section and you will find this window:\nCreate new release tag, give release heading to the Action and publish it ;)\nFinally, we can find it on https://github.com/marketplace by searching “Demo Issue Action 🛰”. Conclusion: Thank you for reading, hope you enjoyed the article! Queries and feedback are most welcome :) kindly leave them below.\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
   "wordCount" : "925",
   "inLanguage": "en",
-  "datePublished": "2022-01-25T00:00:00Z",
+  "image":"https://cdn.hashnode.com/res/hashnode/image/upload/v1643109105478/H-HnvafL8.png?w=1600\u0026h=840\u0026fit=crop\u0026crop=entropy\u0026auto=compress,format\u0026format=webp","datePublished": "2022-01-25T00:00:00Z",
   "dateModified": "2022-01-25T00:00:00Z",
   "author":{
     "@type": "Person",
@@ -126,14 +110,10 @@
 </script>
 </head>
 
-<body class="" id="top">
+<body class=" dark" id="top">
 <script>
-    if (localStorage.getItem("pref-theme") === "dark") {
-        document.body.classList.add('dark');
-    } else if (localStorage.getItem("pref-theme") === "light") {
+    if (localStorage.getItem("pref-theme") === "light") {
         document.body.classList.remove('dark')
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.classList.add('dark');
     }
 
 </script>
@@ -187,6 +167,16 @@
                 </a>
             </li>
             <li>
+                <a href="https://ankur12-1610.github.io/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/tags" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
                 <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
                     <span>Resume</span>&nbsp;
                     <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
@@ -208,10 +198,13 @@
     <h1 class="post-title entry-hint-parent">
       Build your own Github Action and publish to the Github Marketplace!
     </h1>
-    <div class="post-meta"><span title='2022-01-25 00:00:00 +0000 UTC'>January 25, 2022</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/github-actions/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+    <div class="post-meta"><span title='2022-01-25 00:00:00 +0000 UTC'>January 25, 2022</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/ankur12-1610/hugo-ankur12-1610/tree/main/content//posts/github-actions/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
 
 </div>
-  </header> <div class="toc">
+  </header> 
+<figure class="entry-cover"><img loading="eager" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1643109105478/H-HnvafL8.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" alt="github-actions">
+        
+</figure><div class="toc">
     <details >
         <summary accesskey="c" title="(Alt + C)">
             <span class="details">Table of Contents</span>
@@ -236,9 +229,7 @@
     </details>
 </div>
 
-  <div class="post-content"><p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1643109105478/H-HnvafL8.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" alt="cover-image"  />
-</p>
-<h3 id="introduction">Introduction:<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h3>
+  <div class="post-content"><h3 id="introduction">Introduction:<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h3>
 <p>Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.</p>
 <blockquote>
 <p>&ldquo;Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you&rsquo;d like, including CI/CD, and combine actions in a completely customized workflow.&rdquo; - <a href="https://docs.github.com/en/actions">Github Docs</a></p>
