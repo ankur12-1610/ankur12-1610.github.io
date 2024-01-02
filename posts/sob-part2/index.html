@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 | Ankur Patil</title>
+<meta name="keywords" content="Summer of Bitcoin, Flask Framework, Bitcoin, REST API, Open Source, JWT">
+<meta name="description" content="Abstract This blog covers the work that I&rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.
+Implementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.
+Change in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren&rsquo;t necessary.">
+<meta name="author" content="Ankur Patil">
+<link rel="canonical" href="https://ankur12-1610.github.io/posts/sob-part2/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ankur12-1610.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ankur12-1610.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ankur12-1610.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22" />
+<meta property="og:description" content="Abstract This blog covers the work that I&rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.
+Implementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.
+Change in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren&rsquo;t necessary." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ankur12-1610.github.io/posts/sob-part2/" /><meta property="og:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-08-24T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"/>
+<meta name="twitter:description" content="Abstract This blog covers the work that I&rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.
+Implementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.
+Change in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren&rsquo;t necessary."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://ankur12-1610.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Access tokens for Specter's REST API: Part 2 | Summer of Bitcoin '22",
+      "item": "https://ankur12-1610.github.io/posts/sob-part2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Access tokens for Specter's REST API: Part 2 | Summer of Bitcoin '22",
+  "name": "Access tokens for Specter\u0027s REST API: Part 2 | Summer of Bitcoin \u002722",
+  "description": "Abstract This blog covers the work that I\u0026rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.\nImplementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.\nChange in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren\u0026rsquo;t necessary.",
+  "keywords": [
+    "Summer of Bitcoin", "Flask Framework", "Bitcoin", "REST API", "Open Source", "JWT"
+  ],
+  "articleBody": " Abstract This blog covers the work that I’ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.\nImplementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.\nChange in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren’t necessary. After discussing with Kim and Manolis, we concluded that all the information related to the JWT tokens should be stored in a nested hashmap instead of storing it in separate entities. Storing it in separate entities created unnecessary crowding of variables and a nested hashmap was perfect to tackle this problem.\nThe fields related to the JWT token that needed to be stored:\nEarlier, the data was stored in the format: Later, the data was stored in the format of nested hashmap: Token Authentication Implementing Token Authentication was the most important and challenging part of this project. Specter used Flask-HTTPAuth for their Basic Authentication, which I was not entirely familiar with ;')\nAfter reading the documentation and experimenting with the Token Authentication part in a small project, I cleared my basic concepts and hoped on the project’s codebase.\nThe first step was to decode the JWT token to get the payload, and from that payload, I grepped the username of the user.\nThe next step was to get the user from username with the help of Specter’s user_manager and then store it in the global user.\nThe final check was to add jwt.ExpiredSignatureError, to check whether the token is expired or not and jwt.InvalidTokenError, to check whether the token is in a valid format or not.\nTime Parser The expiration time in the payload while encoding the token could only be set to either seconds or minutes or days or any time unit. The problem was that, if the standard time is set to seconds and the user wants his token to be valid for 3 days, he might need to convert 3 days to seconds.\nIn order to avoid this, I used pytimeparser, which basically converts the string into seconds. For eg: If the user sets the time to 3 days then the parser will convert it to seconds (3 days = 259200 seconds) and then it can be easily stored in the database. Similarly, the user can set the token life to 3 minutes, 3 weeks, 3 months and other time units as well.\nNote: For more information regarding pytimeparser visit: https://pypi.org/project/pytimeparse/\nHelper Functions Building these functions made the implementation a lot easier, once written they can be used anywhere and one helper function helped me build other helper functions.\nFor example:\nThe helper functions for saving a newly created token to the database and deleting the token from the database.\ndef add_jwt_token( self, jwt_token_id, jwt_token, jwt_token_description, jwt_token_life ): # Adding a newly created JWT to the hashmap self.jwt_tokens[jwt_token_id] = {} self.jwt_tokens[jwt_token_id][\"jwt_token\"] = jwt_token self.jwt_tokens[jwt_token_id][\"jwt_token_description\"] = jwt_token_description self.jwt_tokens[jwt_token_id][\"jwt_token_life\"] = jwt_token_life self.save_info() def delete_jwt_token(self, jwt_token_id): # Deleting a JWT from the hashmap if jwt_token_id in self.jwt_tokens: del self.jwt_tokens[jwt_token_id] self.save_info() Endpoints /v1alpha/token/: Creating new tokens and fetching all of them. ** Method **: POST\nCode: 201 Created\nRequest Body:\n{ \"jwt_token_description\": \"Token alpha\", \"jwt_token_life\": \"6 minutes\", } Success Response:\n{ \"message\": \"Token generated\", \"jwt_token_id\": \"2bc0160d-edf4-4ab6-9801-52d185f65b59\", \"jwt_token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiand0X3Rva2VuX2lkIjoiMmJjMDE2MGQtZWRmNC00YWI2LTk4MDEtNTJkMTg1ZjY1YjU5Iiwiand0X3Rva2VuX2Rlc2NyaXB0aW9uIjoiVG9rZW4gYWxwaGEiLCJleHAiOjE2NjEzMTg3NjIsImlhdCI6MTY2MTMxODQwMn0.MWbUuZ8BS5L9kryi_zG_PNJ4ud84mPuJhsqhiH_U5Rc\", \"jwt_token_description\": \"Token alpha\", \"jwt_token_life\": 360 } Method: GET\nCode: 200 OK\nSuccess Response:\n{ \"message\": \"Tokens exists\", \"jwt_tokens\": { \"edd6a8f7-47d8-405e-97a8-2e4e26d0fbeb\": { \"jwt_token_description\": \"Token 1\", \"jwt_token_life\": 480, \"jwt_token_remaining_life\": 0 }, \"2bc0160d-edf4-4ab6-9801-52d185f65b59\": { \"jwt_token_description\": \"Token alpha\", \"jwt_token_life\": 360, \"jwt_token_remaining_life\": 232.19542360305786 } } } /v1alpha/token/: Fetching and deleting a particular token by Id. Method: GET\nCode: 200 OK\nSuccess Response:\n{ \"message\": \"Tokens exists\", \"jwt_token_description\": \"Token alpha\", \"jwt_token_life\": 360, \"jwt_token_life_remaining\": 232.19542360305786, \"expiry_status\": \"Valid\" } Method: DELETE\nCode: 200 OK\nSuccess Response:\n{ \"message\": \"Token deleted\" } Project Details: For more info, visit the PR related to this project: https://github.com/cryptoadvance/specter-desktop/pull/1785\nFuture Idea: This implementation of `JWT Token-Based Authentication` is fairly straightforward and clearly helps improve the security of Specter’s API.\nThe following things can be added to the project:\ncreating a UI for it\nadding one more property to tokens, namely endpoints which will store the endpoints the user can access\nLearning: - Through this journey, I learned a lot about how open source projects work, getting involved with the community, and contributing to the projects. - The major learning for me was how familiar I got with `Flask-RESTful` framework and `Flask-HTTPAuth`.\nSpecial Thanks It was an awesome experience for me to work on this project. I learned a lot of new things, Kim and Manolis really helped me whenever I got stuck.\nI would also like to give Adi Shankara and Summer of Bitcoin for this amazing learning experience. I was able to develop great skills and valuable experience. I look forward to contributing to the Bitcoin space.\nAlso, super thanks for the Ledger Nano S and an awesome Swag Kit ;) ment\nConclusion: Thank you for reading, hope you enjoyed it! I’ll continue to update my progress via the series of blogs ;)\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
+  "wordCount" : "885",
+  "inLanguage": "en",
+  "datePublished": "2022-08-24T00:00:00Z",
+  "dateModified": "2022-08-24T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Ankur Patil"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ankur12-1610.github.io/posts/sob-part2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ankur Patil",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ankur12-1610.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ankur12-1610.github.io/" accesskey="h" title="Ankur Patil (Alt + H)">Ankur Patil</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://ankur12-1610.github.io/aboutme/" title="About Me">
+                    <span>About Me</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/blog/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/myjourney/" title="My Journey">
+                    <span>My Journey</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
+                    <span>Resume</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://ankur12-1610.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://ankur12-1610.github.io/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22
+    </h1>
+    <div class="post-meta"><span title='2022-08-24 00:00:00 +0000 UTC'>August 24, 2022</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/sob-part2/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#implementation" aria-label="Implementation">Implementation</a><ul>
+                        
+                <li>
+                    <a href="#change-in-plans" aria-label="Change in plans">Change in plans</a></li>
+                <li>
+                    <a href="#token-authentication" aria-label="Token Authentication">Token Authentication</a></li>
+                <li>
+                    <a href="#time-parser" aria-label="Time Parser">Time Parser</a></li>
+                <li>
+                    <a href="#helper-functions" aria-label="Helper Functions">Helper Functions</a></li></ul>
+                </li>
+                <li>
+                    <a href="#endpoints" aria-label="Endpoints">Endpoints</a></li>
+                <li>
+                    <a href="#project-details" aria-label="Project Details:">Project Details:</a></li>
+                <li>
+                    <a href="#future-idea" aria-label="Future Idea:">Future Idea:</a></li>
+                <li>
+                    <a href="#learning" aria-label="Learning:">Learning:</a></li>
+                <li>
+                    <a href="#special-thanks" aria-label="Special Thanks">Special Thanks</a></li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion:">Conclusion:</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661357884206/clyKLsXzY.png?w=1600&amp;h=840&amp;fit=crop&amp;crop=entropy&amp;auto=compress,format&amp;format=webp" alt=""  />
+</p>
+<h3 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h3>
+<p>This blog covers the work that I&rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the <code>users.json</code> file, which acts as the local database of the user.</p>
+<h3 id="implementation">Implementation<a hidden class="anchor" aria-hidden="true" href="#implementation">#</a></h3>
+<p>Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.</p>
+<h4 id="change-in-plans">Change in plans<a hidden class="anchor" aria-hidden="true" href="#change-in-plans">#</a></h4>
+<iframe src="https://giphy.com/embed/l3q2waulCQqmLNY3K" width="300" height="300" class="giphy-embed"></iframe>
+<p>Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren&rsquo;t necessary. After discussing with Kim and Manolis, we concluded that all the information related to the JWT tokens should be stored in a nested hashmap instead of storing it in separate entities. Storing it in separate entities created unnecessary crowding of variables and a nested hashmap was perfect to tackle this problem.</p>
+<p>The fields related to the JWT token that needed to be stored:</p>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661089000351/t30ABhBO4.png" alt="jwt-fields.png"  />
+</p>
+<ul>
+<li>Earlier, the data was stored in the format:</li>
+</ul>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093571428/CoC17nm2R.png?height=300" alt="json-before.png"  />
+</p>
+<ul>
+<li>Later, the data was stored in the format of nested hashmap:</li>
+</ul>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093416372/fluUiPHfz.png" alt="json-after.png"  />
+</p>
+<h4 id="token-authentication">Token Authentication<a hidden class="anchor" aria-hidden="true" href="#token-authentication">#</a></h4>
+<p>Implementing Token Authentication was the most important and challenging part of this project. Specter used <a href="https://flask-httpauth.readthedocs.io/en/latest/index.html"><code>Flask-HTTPAuth</code></a> for their Basic Authentication, which I was not entirely familiar with ;')</p>
+<p>After reading the documentation and experimenting with the Token Authentication part in a small project, I cleared my basic concepts and hoped on the project&rsquo;s codebase.</p>
+<p>The first step was to decode the JWT token to get the payload, and from that payload, I grepped the <code>username</code> of the user.</p>
+<p>The next step was to get the user from username with the help of Specter&rsquo;s <code>user_manager</code> and then store it in the global user.</p>
+<p>The final check was to add <code>jwt.ExpiredSignatureError</code>, to check whether the token is expired or not and <code>jwt.InvalidTokenError</code>, to check whether the token is in a valid format or not.</p>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661254215989/sfft5Y8a4.png" alt="token-auth.png"  />
+</p>
+<h4 id="time-parser">Time Parser<a hidden class="anchor" aria-hidden="true" href="#time-parser">#</a></h4>
+<p>The expiration time in the payload while encoding the token could only be set to either seconds or minutes or days or any time unit. The problem was that, if the standard time is set to seconds and the user wants his token to be valid for 3 days, he might need to convert 3 days to seconds.</p>
+<p>In order to avoid this, I used <code>pytimeparser</code>, which basically converts the string into seconds. For eg: If the user sets the time to <code>3 days</code> then the parser will convert it to seconds (3 days = 259200 seconds) and then it can be easily stored in the database. Similarly, the user can set the token life to <code>3 minutes</code>, <code>3 weeks</code>, <code>3 months</code> and other time units as well.</p>
+<blockquote>
+<p>Note: For more information regarding <code>pytimeparser</code> visit: <a href="https://pypi.org/project/pytimeparse/">https://pypi.org/project/pytimeparse/</a></p>
+</blockquote>
+<h4 id="helper-functions">Helper Functions<a hidden class="anchor" aria-hidden="true" href="#helper-functions">#</a></h4>
+<p>Building these functions made the implementation a lot easier, once written they can be used anywhere and one helper function helped me build other helper functions.</p>
+<p>For example:<br>
+The helper functions for saving a newly created token to the database and deleting the token from the database.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">def add_jwt_token(
+</span></span><span class="line"><span class="cl">    self, jwt_token_id, jwt_token, jwt_token_description, jwt_token_life
+</span></span><span class="line"><span class="cl">):
+</span></span><span class="line"><span class="cl">    # Adding a newly created JWT to the hashmap
+</span></span><span class="line"><span class="cl">    self.jwt_tokens[jwt_token_id] = {}
+</span></span><span class="line"><span class="cl">    self.jwt_tokens[jwt_token_id][&#34;jwt_token&#34;] = jwt_token
+</span></span><span class="line"><span class="cl">    self.jwt_tokens[jwt_token_id][&#34;jwt_token_description&#34;] = jwt_token_description
+</span></span><span class="line"><span class="cl">    self.jwt_tokens[jwt_token_id][&#34;jwt_token_life&#34;] = jwt_token_life
+</span></span><span class="line"><span class="cl">    self.save_info()
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">def delete_jwt_token(self, jwt_token_id):
+</span></span><span class="line"><span class="cl">    # Deleting a JWT from the hashmap
+</span></span><span class="line"><span class="cl">    if jwt_token_id in self.jwt_tokens:
+</span></span><span class="line"><span class="cl">        del self.jwt_tokens[jwt_token_id]
+</span></span><span class="line"><span class="cl">        self.save_info()
+</span></span></code></pre></div><h3 id="endpoints">Endpoints<a hidden class="anchor" aria-hidden="true" href="#endpoints">#</a></h3>
+<ul>
+<li><code>/v1alpha/token/</code>: Creating new tokens and fetching all of them.</li>
+</ul>
+<p>** Method **: <code>POST</code></p>
+<p><strong>Code</strong>: <code>201 Created</code></p>
+<p><strong>Request Body</strong>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_description&#34;: &#34;Token alpha&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_life&#34;: &#34;6 minutes&#34;,
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p><strong>Success Response</strong>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;message&#34;: &#34;Token generated&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_id&#34;: &#34;2bc0160d-edf4-4ab6-9801-52d185f65b59&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token&#34;: &#34;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiand0X3Rva2VuX2lkIjoiMmJjMDE2MGQtZWRmNC00YWI2LTk4MDEtNTJkMTg1ZjY1YjU5Iiwiand0X3Rva2VuX2Rlc2NyaXB0aW9uIjoiVG9rZW4gYWxwaGEiLCJleHAiOjE2NjEzMTg3NjIsImlhdCI6MTY2MTMxODQwMn0.MWbUuZ8BS5L9kryi_zG_PNJ4ud84mPuJhsqhiH_U5Rc&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_description&#34;: &#34;Token alpha&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_life&#34;: 360
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p><strong>Method</strong>: <code>GET</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;message&#34;: &#34;Tokens exists&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_tokens&#34;: {
+</span></span><span class="line"><span class="cl">        &#34;edd6a8f7-47d8-405e-97a8-2e4e26d0fbeb&#34;: {
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_description&#34;: &#34;Token 1&#34;,
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_life&#34;: 480,
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_remaining_life&#34;: 0
+</span></span><span class="line"><span class="cl">        },
+</span></span><span class="line"><span class="cl">        &#34;2bc0160d-edf4-4ab6-9801-52d185f65b59&#34;: {
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_description&#34;: &#34;Token alpha&#34;,
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_life&#34;: 360,
+</span></span><span class="line"><span class="cl">            &#34;jwt_token_remaining_life&#34;: 232.19542360305786
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><ul>
+<li><code>/v1alpha/token/&lt;token_id&gt;</code>: Fetching and deleting a particular token by Id.</li>
+</ul>
+<p><strong>Method</strong>: <code>GET</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;message&#34;: &#34;Tokens exists&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_description&#34;: &#34;Token alpha&#34;,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_life&#34;: 360,
+</span></span><span class="line"><span class="cl">    &#34;jwt_token_life_remaining&#34;: 232.19542360305786,
+</span></span><span class="line"><span class="cl">    &#34;expiry_status&#34;: &#34;Valid&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p><strong>Method</strong>: <code>DELETE</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;message&#34;: &#34;Token deleted&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><h3 id="project-details">Project Details:<a hidden class="anchor" aria-hidden="true" href="#project-details">#</a></h3>
+<blockquote>
+<p>For more info, visit the PR related to this project: <a href="https://github.com/cryptoadvance/specter-desktop/pull/1785">https://github.com/cryptoadvance/specter-desktop/pull/1785</a></p>
+</blockquote>
+<h3 id="future-idea">Future Idea:<a hidden class="anchor" aria-hidden="true" href="#future-idea">#</a></h3>
+<iframe src="https://giphy.com/embed/ZZkCo8zKWtt2ZgozfX" width="400" height="300" class="giphy-embed"></iframe>
+<p>This implementation of `JWT Token-Based Authentication` is fairly straightforward and clearly helps improve the security of Specter&rsquo;s API.</p>
+<p>The following things can be added to the project:</p>
+<ul>
+<li>
+<p>creating a UI for it</p>
+</li>
+<li>
+<p>adding one more property to tokens, namely <code>endpoints</code> which will store the endpoints the user can access</p>
+</li>
+</ul>
+<h3 id="learning">Learning:<a hidden class="anchor" aria-hidden="true" href="#learning">#</a></h3>
+<iframe src="https://giphy.com/embed/fhAwk4DnqNgw8" width="350" height="210" class="giphy-embed"></iframe>
+<p>- Through this journey, I learned a lot about how open source projects work, getting involved with the community, and contributing to the projects. - The major learning for me was how familiar I got with `Flask-RESTful` framework and `Flask-HTTPAuth`.</p>
+<h3 id="special-thanks">Special Thanks<a hidden class="anchor" aria-hidden="true" href="#special-thanks">#</a></h3>
+<iframe src="https://giphy.com/embed/3o6Zt6KHxJTbXCnSvu" width="350" height="200" class="giphy-embed"></iframe>
+<p>It was an awesome experience for me to work on this project. I learned a lot of new things, Kim and Manolis really helped me whenever I got stuck.</p>
+<p>I would also like to give Adi Shankara and Summer of Bitcoin for this amazing learning experience. I was able to develop great skills and valuable experience. I look forward to contributing to the Bitcoin space.</p>
+<p>Also, super thanks for the Ledger Nano S and an awesome Swag Kit ;) ment</p>
+<h3 id="conclusion">Conclusion:<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h3>
+<iframe src="https://giphy.com/embed/3o6Mb5M2dmWNNzrSE0" width="300" height="270" class="giphy-embed"></iframe>
+<p>Thank you for reading, hope you enjoyed it! I&rsquo;ll continue to update my progress via the series of blogs ;)</p>
+<p>Follow me on <a href="https://twitter.com/ankurrap">Twitter</a> | <a href="https://www.linkedin.com/in/ankur-patil-a112a3202/">LinkedIn</a> for more web development-related tips and posts.</p>
+<p>That&rsquo;s all for today! You have read the article till the end.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ankur12-1610.github.io/tags/summer-of-bitcoin/">Summer of Bitcoin</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/flask-framework/">Flask Framework</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/bitcoin/">Bitcoin</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/rest-api/">REST API</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/open-source/">Open Source</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/jwt/">JWT</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://ankur12-1610.github.io/posts/journey-sob/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>My Journey: Getting Selected in Summer of Bitcoin &#39;22</span>
+  </a>
+  <a class="next" href="https://ankur12-1610.github.io/posts/sob-part1/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on x"
+            href="https://x.com/intent/tweet/?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f&amp;hashtags=SummerofBitcoin%2cFlaskFramework%2cBitcoin%2cRESTAPI%2cOpenSource%2cJWT">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f&amp;title=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;summary=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;source=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f&title=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on whatsapp"
+            href="https://api.whatsapp.com/send?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722%20-%20https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on telegram"
+            href="https://telegram.me/share/url?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22 on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%202%20%7c%20Summer%20of%20Bitcoin%20%2722&u=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part2%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://ankur12-1610.github.io/">Ankur Patil</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

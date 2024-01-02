@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 | Ankur Patil</title>
+<meta name="keywords" content="Summer of Bitcoin, Flask Framework, Bitcoin, REST API, Open Source, JWT">
+<meta name="description" content="Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
+Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
+My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:">
+<meta name="author" content="Ankur Patil">
+<link rel="canonical" href="https://ankur12-1610.github.io/posts/sob-part1/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.2d50b1531bd1b3146d65c5543bd298f7f982786aadee4c223cb3a1cb51906106.css" integrity="sha256-LVCxUxvRsxRtZcVUO9KY9/mCeGqt7kwiPLOhy1GQYQY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://ankur12-1610.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://ankur12-1610.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://ankur12-1610.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://ankur12-1610.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://ankur12-1610.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22" />
+<meta property="og:description" content="Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
+Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
+My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ankur12-1610.github.io/posts/sob-part1/" /><meta property="og:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-07-03T00:00:00+00:00" />
+<meta property="article:modified_time" content="2022-07-03T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://ankur12-1610.github.io/images/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22"/>
+<meta name="twitter:description" content="Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
+Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
+My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://ankur12-1610.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Access tokens for Specter's REST API: Part 1 | Summer of Bitcoin '22",
+      "item": "https://ankur12-1610.github.io/posts/sob-part1/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Access tokens for Specter's REST API: Part 1 | Summer of Bitcoin '22",
+  "name": "Access tokens for Specter\u0027s REST API: Part 1 | Summer of Bitcoin \u002722",
+  "description": "Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.\nSpecter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.\nMy Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:",
+  "keywords": [
+    "Summer of Bitcoin", "Flask Framework", "Bitcoin", "REST API", "Open Source", "JWT"
+  ],
+  "articleBody": " Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.\nSpecter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.\nMy Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:\nI have already used it\nI read their official documentation and got a fan of JWT and its advantages over Simple WebToken (SWT) and Security Assertion Markup Language Tokens (SAML). source\nJWT authentication flow\nExpected Outcomes:\nUser will be able to create a JWT token when the request is sent to a particular endpoint of the api\nOnce the token is generated the user can only see it once and the token needs to be stored somewhere in order to access sessions later on.\nAuthorization will be based on HTTPTokenAuth\nProject Progress Headstart 🚀 At first, when I went through Specter’s codebase it was difficult for me to understand and I was not able to figure out where to make the changes, but thanks to my mentor (k9ert) who helped me sort things out when I was stuck. He suggested making a small FLASK API in a similar structured way as Specter’s API was made. This really helped me understand Flask-RESTful and Flask_HTTPAuth.\nPoC Implementation 📖 Step 1\nThe very first step was to install PyJWT:\npip install PyJWT Next, we need to create a ‘jwt_token’ variable in the UserMixinof src/cryptoadvance/specter/user.py, then we pass it in the user_dict with the help of a property.\nclass User(UserMixin): def __init__( ... jwt_token, ... ): ... self.jwt_token = jwt_token ... # TODO: User obj instantiation belongs in UserManager @classmethod def from_json(cls, user_dict, specter): try: user_args = { ... // Setting default value of jwt_token to None so that it can be stored in the user's data and then later on updated \"jwt_token\": user_dict.get(\"jwt_token\", None), ... } if not user_dict[\"is_admin\"]: user_args[\"config\"] = user_dict[\"config\"] return cls(**user_args) else: user_args[\"is_admin\"] = True return cls(**user_args) except Exception as e: handle_exception(e) raise SpecterError(f\"Unable to parse user JSON.:{e}\") @property def json(self): user_dict = { ... \"jwt_token\": self.jwt_token, ... } if not self.is_admin: user_dict[\"config\"] = self.config return user_dict We also need to add helper functions in order to fetch and delete the token:\ndef save_jwt_token(self, jwt_token): self.jwt_token = jwt_token self.save_info() def delete_jwt_token( self, ): self.jwt_token = None self.save_info() Step 2\nThis step includes the creation of token based endpoints in the API. For this I created a new file namely jwt.py in the rest directory.\nDirectory tree\nimport jwt from flask import current_app as app from cryptoadvance.specter.api.rest.base import ( BaseResource, rest_resource, AdminResource, ) import uuid import datetime import logging from ...user import * from .base import * from .. import auth logger = logging.getLogger(__name__) def generate_jwt(user): payload = { \"user\": user.username, \"exp\": datetime.datetime.utcnow() + datetime.timedelta(days=1), } return jwt.encode(payload, app.config[\"SECRET_KEY\"], algorithm=\"HS256\") @rest_resource class TokenResource(AdminResource): endpoints = [\"/v1alpha/token/\"] def get(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token return_dict = { \"username\": user_details.username, \"id\": user_details.id, \"jwt_token\": jwt_token, } if jwt_token is None: return_dict[\"jwt_token\"] = generate_jwt(user_details) jwt_token = return_dict[\"jwt_token\"] user_details.save_jwt_token(jwt_token) return { \"message\": \"Token generated\", \"username\": user_details.username, \"jwt_token\": jwt_token, } return {\"message\": \"Token already exists\", \"jwt_token\": jwt_token} def delete(self): user = auth.current_user() user_details = app.specter.user_manager.get_user(user) jwt_token = user_details.jwt_token if jwt_token is None: return {\"message\": \"Token does not exist\"} user_details.delete_jwt_token() return {\"message\": \"Token deleted\"} This basically includes the function generate_jwt which takes user as an argument and generates the token with the payload as user.username and the expiry date of the token (exp).\nThen we have two endpoints - GET and DELETE which receive data from the User model using user_manager by passing the authenticated user.\nGET request functionality\nDELETE request functionality\nLast Step\nThe last step is to register the endpoints in the API, this can be done by adding:\nfrom .jwt import TokenResource in src/cryptoadvance/specter/api/rest/api.py\nPR related to this project https://github.com/cryptoadvance/specter-desktop/pull/1785\nDemo of the implemented PoC:\nFuture milestones\nThe plans for the rest of my journey are:\nAdding a verfiy_token function that verifies if the given token is correct or not.\nReplacing HTTPBasicAuth with HTTPTokenAuth\nAdd one-time view functionality for the users.\nConclusion Thank you for reading, hope you enjoyed it! I’ll continue to update my progress via the series of blogs ;)\nFollow me on Twitter | LinkedIn for more web development-related tips and posts.\nThat’s all for today! You have read the article till the end.\n",
+  "wordCount" : "747",
+  "inLanguage": "en",
+  "datePublished": "2022-07-03T00:00:00Z",
+  "dateModified": "2022-07-03T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Ankur Patil"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://ankur12-1610.github.io/posts/sob-part1/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Ankur Patil",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://ankur12-1610.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://ankur12-1610.github.io/" accesskey="h" title="Ankur Patil (Alt + H)">Ankur Patil</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://ankur12-1610.github.io/aboutme/" title="About Me">
+                    <span>About Me</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/blog/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/myjourney/" title="My Journey">
+                    <span>My Journey</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://ankur12-1610.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view" title="Resume">
+                    <span>Resume</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://ankur12-1610.github.io/">Home</a>&nbsp;»&nbsp;<a href="https://ankur12-1610.github.io/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22
+    </h1>
+    <div class="post-meta"><span title='2022-07-03 00:00:00 +0000 UTC'>July 3, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Ankur Patil&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/posts/sob-part1/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#my-project" aria-label="My Project">My Project</a></li>
+                <li>
+                    <a href="#project-progress" aria-label="Project Progress">Project Progress</a><ul>
+                        
+                <li>
+                    <a href="#headstart-" aria-label="Headstart 🚀">Headstart 🚀</a></li>
+                <li>
+                    <a href="#poc-implementation-" aria-label="PoC Implementation 📖">PoC Implementation 📖</a></li></ul>
+                </li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656862908396/J9knlsb49.png?w=1600&amp;h=840&amp;fit=fill&amp;fill=blur&amp;auto=compress,format&amp;format=webp" alt=""  />
+</p>
+<h3 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h3>
+<p><a href="https://github.com/cryptoadvance/specter-desktop">Specter Desktop</a> is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.</p>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656859075053/CpG22i_7I.png" alt="specter.png"  />
+</p>
+<p>Specter already has a REST API system, but the authorization is currently done by <code>HTTPBasicAuth</code> and to improve the security, <code>HTTPTokenAuth</code> is really necessary. <strong>Access tokens</strong> would be a significant improvement.</p>
+<h3 id="my-project">My Project<a hidden class="anchor" aria-hidden="true" href="#my-project">#</a></h3>
+<p><img loading="lazy" src="https://cdn.hashnode.com/res/hashnode/image/upload/v1656859887473/e9UqDBvPD.jpg?height=300" alt="367ei5.jpg"  />
+</p>
+<p>I have to use access tokens for the token-based authorization, the access token I opted for was <a href="https://jwt.io/"><strong>JSON Web Token (JWT)</strong></a> because:</p>
+<ul>
+<li>
+<p>I have already used it</p>
+</li>
+<li>
+<p>I read their official documentation and got a fan of JWT and its advantages over Simple WebToken (SWT) and Security Assertion Markup Language Tokens (SAML). <a href="https://jwt.io/introduction#:~:text=Why%20should%20we%20use%20JSON%20Web%20Tokens%3F">source</a></p>
+</li>
+</ul>
+<blockquote>
+<p>JWT authentication flow</p>
+</blockquote>
+<p><strong>Expected Outcomes</strong>:</p>
+<ul>
+<li>
+<p>User will be able to create a JWT token when the request is sent to a particular endpoint of the api</p>
+</li>
+<li>
+<p>Once the token is generated the user can only see it once and the token needs to be stored somewhere in order to access sessions later on.</p>
+</li>
+<li>
+<p>Authorization will be based on <code>HTTPTokenAuth</code></p>
+</li>
+</ul>
+<h3 id="project-progress">Project Progress<a hidden class="anchor" aria-hidden="true" href="#project-progress">#</a></h3>
+<iframe src="https://giphy.com/embed/Tfk8R5KDPn3PxEUVaI" width="400" height="400" class="giphy-embed"></iframe>
+<h4 id="headstart-">Headstart 🚀<a hidden class="anchor" aria-hidden="true" href="#headstart-">#</a></h4>
+<p>At first, when I went through Specter&rsquo;s codebase it was difficult for me to understand and I was not able to figure out where to make the changes, but thanks to my mentor (<a href="https://github.com/k9ert">k9ert</a>) who helped me sort things out when I was stuck. He suggested making a small FLASK API in a similar structured way as Specter&rsquo;s API was made. This really helped me understand <code>Flask-RESTful</code> and <code>Flask_HTTPAuth</code>.</p>
+<h4 id="poc-implementation-">PoC Implementation 📖<a hidden class="anchor" aria-hidden="true" href="#poc-implementation-">#</a></h4>
+<p><strong>Step 1</strong></p>
+<p>The very first step was to install <code>PyJWT</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">pip install PyJWT
+</span></span></code></pre></div><p>Next, we need to create a &lsquo;jwt_token&rsquo; variable in the <code>UserMixin</code>of <code>src/cryptoadvance/specter/user.py</code>, then we pass it in the <code>user_dict</code> with the help of a property.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">class User(UserMixin):
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">     def __init__(
+</span></span><span class="line"><span class="cl">        ...
+</span></span><span class="line"><span class="cl">        jwt_token, 
+</span></span><span class="line"><span class="cl">        ...
+</span></span><span class="line"><span class="cl">    ):
+</span></span><span class="line"><span class="cl">        ...
+</span></span><span class="line"><span class="cl">        self.jwt_token = jwt_token
+</span></span><span class="line"><span class="cl">        ...
+</span></span><span class="line"><span class="cl">    # TODO: User obj instantiation belongs in UserManager
+</span></span><span class="line"><span class="cl">    @classmethod
+</span></span><span class="line"><span class="cl">    def from_json(cls, user_dict, specter):
+</span></span><span class="line"><span class="cl">        try:
+</span></span><span class="line"><span class="cl">            user_args = {
+</span></span><span class="line"><span class="cl">                ...
+</span></span><span class="line"><span class="cl">                // Setting default value of jwt_token to None so that it can be stored in the user&#39;s data and then later on updated
+</span></span><span class="line"><span class="cl">                &#34;jwt_token&#34;: user_dict.get(&#34;jwt_token&#34;, None),
+</span></span><span class="line"><span class="cl">                ...
+</span></span><span class="line"><span class="cl">            }
+</span></span><span class="line"><span class="cl">            if not user_dict[&#34;is_admin&#34;]:
+</span></span><span class="line"><span class="cl">                user_args[&#34;config&#34;] = user_dict[&#34;config&#34;]
+</span></span><span class="line"><span class="cl">                return cls(**user_args)
+</span></span><span class="line"><span class="cl">            else:
+</span></span><span class="line"><span class="cl">                user_args[&#34;is_admin&#34;] = True
+</span></span><span class="line"><span class="cl">                return cls(**user_args)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        except Exception as e:
+</span></span><span class="line"><span class="cl">            handle_exception(e)
+</span></span><span class="line"><span class="cl">            raise SpecterError(f&#34;Unable to parse user JSON.:{e}&#34;)
+</span></span><span class="line"><span class="cl">    @property
+</span></span><span class="line"><span class="cl">    def json(self):
+</span></span><span class="line"><span class="cl">        user_dict = {
+</span></span><span class="line"><span class="cl">            ...
+</span></span><span class="line"><span class="cl">            &#34;jwt_token&#34;: self.jwt_token,
+</span></span><span class="line"><span class="cl">            ...
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">        if not self.is_admin:
+</span></span><span class="line"><span class="cl">            user_dict[&#34;config&#34;] = self.config
+</span></span><span class="line"><span class="cl">        return user_dict
+</span></span></code></pre></div><p>We also need to add <strong>helper</strong> functions in order to fetch and delete the token:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">    def save_jwt_token(self, jwt_token):
+</span></span><span class="line"><span class="cl">        self.jwt_token = jwt_token
+</span></span><span class="line"><span class="cl">        self.save_info()
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    def delete_jwt_token(
+</span></span><span class="line"><span class="cl">        self,
+</span></span><span class="line"><span class="cl">    ):
+</span></span><span class="line"><span class="cl">        self.jwt_token = None
+</span></span><span class="line"><span class="cl">        self.save_info()
+</span></span></code></pre></div><p><strong>Step 2</strong></p>
+<p>This step includes the creation of token based endpoints in the API. For this I created a new file namely <code>jwt.py</code> in the <code>rest</code> directory.</p>
+<blockquote>
+<p>Directory tree</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">import jwt
+</span></span><span class="line"><span class="cl">from flask import current_app as app
+</span></span><span class="line"><span class="cl">from cryptoadvance.specter.api.rest.base import (
+</span></span><span class="line"><span class="cl">    BaseResource,
+</span></span><span class="line"><span class="cl">    rest_resource,
+</span></span><span class="line"><span class="cl">    AdminResource,
+</span></span><span class="line"><span class="cl">)
+</span></span><span class="line"><span class="cl">import uuid
+</span></span><span class="line"><span class="cl">import datetime
+</span></span><span class="line"><span class="cl">import logging
+</span></span><span class="line"><span class="cl">from ...user import *
+</span></span><span class="line"><span class="cl">from .base import *
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">from .. import auth
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">logger = logging.getLogger(__name__)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">def generate_jwt(user):
+</span></span><span class="line"><span class="cl">    payload = {
+</span></span><span class="line"><span class="cl">        &#34;user&#34;: user.username,
+</span></span><span class="line"><span class="cl">        &#34;exp&#34;: datetime.datetime.utcnow() + datetime.timedelta(days=1),
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">    return jwt.encode(payload, app.config[&#34;SECRET_KEY&#34;], algorithm=&#34;HS256&#34;)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">@rest_resource
+</span></span><span class="line"><span class="cl">class TokenResource(AdminResource):
+</span></span><span class="line"><span class="cl">    endpoints = [&#34;/v1alpha/token/&#34;]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    def get(self):
+</span></span><span class="line"><span class="cl">        user = auth.current_user()
+</span></span><span class="line"><span class="cl">        user_details = app.specter.user_manager.get_user(user)
+</span></span><span class="line"><span class="cl">        jwt_token = user_details.jwt_token
+</span></span><span class="line"><span class="cl">        return_dict = {
+</span></span><span class="line"><span class="cl">            &#34;username&#34;: user_details.username,
+</span></span><span class="line"><span class="cl">            &#34;id&#34;: user_details.id,
+</span></span><span class="line"><span class="cl">            &#34;jwt_token&#34;: jwt_token,
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">        if jwt_token is None:
+</span></span><span class="line"><span class="cl">            return_dict[&#34;jwt_token&#34;] = generate_jwt(user_details)
+</span></span><span class="line"><span class="cl">            jwt_token = return_dict[&#34;jwt_token&#34;]
+</span></span><span class="line"><span class="cl">            user_details.save_jwt_token(jwt_token)
+</span></span><span class="line"><span class="cl">            return {
+</span></span><span class="line"><span class="cl">                &#34;message&#34;: &#34;Token generated&#34;,
+</span></span><span class="line"><span class="cl">                &#34;username&#34;: user_details.username,
+</span></span><span class="line"><span class="cl">                &#34;jwt_token&#34;: jwt_token,
+</span></span><span class="line"><span class="cl">            }
+</span></span><span class="line"><span class="cl">        return {&#34;message&#34;: &#34;Token already exists&#34;, &#34;jwt_token&#34;: jwt_token}
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    def delete(self):
+</span></span><span class="line"><span class="cl">        user = auth.current_user()
+</span></span><span class="line"><span class="cl">        user_details = app.specter.user_manager.get_user(user)
+</span></span><span class="line"><span class="cl">        jwt_token = user_details.jwt_token
+</span></span><span class="line"><span class="cl">        if jwt_token is None:
+</span></span><span class="line"><span class="cl">            return {&#34;message&#34;: &#34;Token does not exist&#34;}
+</span></span><span class="line"><span class="cl">        user_details.delete_jwt_token()
+</span></span><span class="line"><span class="cl">        return {&#34;message&#34;: &#34;Token deleted&#34;}
+</span></span></code></pre></div><p>This basically includes the function <code>generate_jwt</code> which takes <code>user</code> as an argument and generates the token with the payload as <code>user.username</code> and the expiry date of the token (<code>exp</code>).</p>
+<p>Then we have two endpoints - <code>GET</code> and <code>DELETE</code> which receive data from the <code>User</code> model using <code>user_manager</code> by passing the authenticated <code>user</code>.</p>
+<blockquote>
+<p>GET request functionality</p>
+</blockquote>
+<blockquote>
+<p>DELETE request functionality</p>
+</blockquote>
+<p><strong>Last Step</strong></p>
+<p>The last step is to register the endpoints in the API, this can be done by adding:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-plaintext" data-lang="plaintext"><span class="line"><span class="cl">from .jwt import TokenResource
+</span></span></code></pre></div><p>in <code>src/cryptoadvance/specter/api/rest/api.py</code></p>
+<blockquote>
+<p>PR related to this project <a href="https://github.com/cryptoadvance/specter-desktop/pull/1785">https://github.com/cryptoadvance/specter-desktop/pull/1785</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<p>Demo of the implemented PoC:</p>
+</blockquote>
+<p><strong>Future milestones</strong></p>
+<iframe src="https://giphy.com/embed/kit7OGuNpZQzDZRmrm" width="430" height="300" class="giphy-embed"></iframe>
+<p>The plans for the rest of my journey are:</p>
+<ul>
+<li>
+<p>Adding a <code>verfiy_token</code> function that verifies if the given token is correct or not.</p>
+</li>
+<li>
+<p>Replacing <code>HTTPBasicAuth</code> with <code>HTTPTokenAuth</code></p>
+</li>
+<li>
+<p>Add one-time view functionality for the users.</p>
+</li>
+</ul>
+<h3 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h3>
+<iframe src="https://giphy.com/embed/fMKLjY1O45PxN90eB1" width="400" height="400" class="giphy-embed"></iframe>
+<p>Thank you for reading, hope you enjoyed it! I&rsquo;ll continue to update my progress via the series of blogs ;)</p>
+<p>Follow me on <a href="https://twitter.com/ankurrap">Twitter</a> | <a href="https://www.linkedin.com/in/ankur-patil-a112a3202/">LinkedIn</a> for more web development-related tips and posts.</p>
+<p>That&rsquo;s all for today! You have read the article till the end.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://ankur12-1610.github.io/tags/summer-of-bitcoin/">Summer of Bitcoin</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/flask-framework/">Flask Framework</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/bitcoin/">Bitcoin</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/rest-api/">REST API</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/open-source/">Open Source</a></li>
+      <li><a href="https://ankur12-1610.github.io/tags/jwt/">JWT</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://ankur12-1610.github.io/posts/sob-part2/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22</span>
+  </a>
+  <a class="next" href="https://ankur12-1610.github.io/posts/spacevim/">
+    <span class="title">Next »</span>
+    <br>
+    <span>SpaceVim as IDE</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on x"
+            href="https://x.com/intent/tweet/?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f&amp;hashtags=SummerofBitcoin%2cFlaskFramework%2cBitcoin%2cRESTAPI%2cOpenSource%2cJWT">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f&amp;title=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;summary=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;source=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f&title=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on whatsapp"
+            href="https://api.whatsapp.com/send?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722%20-%20https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on telegram"
+            href="https://telegram.me/share/url?text=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722&amp;url=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22 on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Access%20tokens%20for%20Specter%27s%20REST%20API%3a%20Part%201%20%7c%20Summer%20of%20Bitcoin%20%2722&u=https%3a%2f%2fankur12-1610.github.io%2fposts%2fsob-part1%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2024 <a href="https://ankur12-1610.github.io/">Ankur Patil</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

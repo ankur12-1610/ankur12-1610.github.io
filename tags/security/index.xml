@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Security on Ankur Patil</title>
+    <link>https://ankur12-1610.github.io/tags/security/</link>
+    <description>Recent content in Security on Ankur Patil</description>
+    <image>
+      <title>Ankur Patil</title>
+      <url>https://ankur12-1610.github.io/images/papermod-cover.png</url>
+      <link>https://ankur12-1610.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Jan 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ankur12-1610.github.io/tags/security/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacking JWT Tokens: By Bruteforcing Weak Signing Key</title>
+      <link>https://ankur12-1610.github.io/posts/hack-jwt/</link>
+      <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/hack-jwt/</guid>
+      <description>This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key!
+JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret with the HMAC algorithm.</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Go Language on Ankur Patil</title>
+    <link>https://ankur12-1610.github.io/tags/go-language/</link>
+    <description>Recent content in Go Language on Ankur Patil</description>
+    <image>
+      <title>Ankur Patil</title>
+      <url>https://ankur12-1610.github.io/images/papermod-cover.png</url>
+      <link>https://ankur12-1610.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 03 Jun 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ankur12-1610.github.io/tags/go-language/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>My LFX Mentorship Journey with CNCF: Kubernetes</title>
+      <link>https://ankur12-1610.github.io/posts/journey-lfx/</link>
+      <pubDate>Sat, 03 Jun 2023 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/journey-lfx/</guid>
+      <description>I have always wanted to participate in the LFX Mentorship program and here I am, graduated, writing this blog. These 3 months were amazing! This blog covers my experience in this mentorship.
+What’s the LFX Mentorship? “The Linux Foundation Mentorship Program is designed to help developers — many of whom are first-time open source contributors — with necessary skills and resources to learn, experiment, and contribute effectively to open source communities.</description>
+    </item>
+  </channel>
+</rss>

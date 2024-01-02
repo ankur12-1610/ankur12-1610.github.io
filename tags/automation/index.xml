@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>automation on Ankur Patil</title>
+    <link>https://ankur12-1610.github.io/tags/automation/</link>
+    <description>Recent content in automation on Ankur Patil</description>
+    <image>
+      <title>Ankur Patil</title>
+      <url>https://ankur12-1610.github.io/images/papermod-cover.png</url>
+      <link>https://ankur12-1610.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 25 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ankur12-1610.github.io/tags/automation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Build your own Github Action and publish to the Github Marketplace!</title>
+      <link>https://ankur12-1610.github.io/posts/github-actions/</link>
+      <pubDate>Tue, 25 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/github-actions/</guid>
+      <description>Introduction: Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.
+&amp;ldquo;Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you&amp;rsquo;d like, including CI/CD, and combine actions in a completely customized workflow.&amp;rdquo; - Github Docs</description>
+    </item>
+  </channel>
+</rss>

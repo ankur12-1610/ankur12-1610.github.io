@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>emacs on Ankur Patil</title>
+    <link>https://ankur12-1610.github.io/tags/emacs/</link>
+    <description>Recent content in emacs on Ankur Patil</description>
+    <image>
+      <title>Ankur Patil</title>
+      <url>https://ankur12-1610.github.io/images/papermod-cover.png</url>
+      <link>https://ankur12-1610.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 20 May 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ankur12-1610.github.io/tags/emacs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SpaceVim as IDE</title>
+      <link>https://ankur12-1610.github.io/posts/spacevim/</link>
+      <pubDate>Fri, 20 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/spacevim/</guid>
+      <description>Introduction: All of us at some part of our software development journey has most likely heard of Vim.
+Vim is a highly configurable text editor built to make creating and changing any kind of text very efficient. It is included as &amp;ldquo;vi&amp;rdquo; with most UNIX systems and with Apple OS X.
+Vim is rock stable and is continuously being developed to become even better. Among its features are: persistent, multi-level undo tree extensive plugin system support for hundreds of programming languages and file formats powerful search and replace integrates with many tools</description>
+    </item>
+  </channel>
+</rss>

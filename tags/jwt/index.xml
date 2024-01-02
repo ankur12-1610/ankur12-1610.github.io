@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JWT on Ankur Patil</title>
+    <link>https://ankur12-1610.github.io/tags/jwt/</link>
+    <description>Recent content in JWT on Ankur Patil</description>
+    <image>
+      <title>Ankur Patil</title>
+      <url>https://ankur12-1610.github.io/images/papermod-cover.png</url>
+      <link>https://ankur12-1610.github.io/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 02 Jan 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://ankur12-1610.github.io/tags/jwt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hacking JWT Tokens: By Bruteforcing Weak Signing Key</title>
+      <link>https://ankur12-1610.github.io/posts/hack-jwt/</link>
+      <pubDate>Tue, 02 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/hack-jwt/</guid>
+      <description>This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key!
+JWT tokens Introduction JSON Web Token (JWT) is an open standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret with the HMAC algorithm.</description>
+    </item>
+    <item>
+      <title>My Journey: Getting Selected in Summer of Bitcoin &#39;22</title>
+      <link>https://ankur12-1610.github.io/posts/journey-sob/</link>
+      <pubDate>Wed, 14 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/journey-sob/</guid>
+      <description>On May 1, I received an email saying that I was one of the 82 interns selected amongst 20317 applicants for the Summer of Bitcoin 2022 program.
+I was really happy and surprised as I didn&amp;rsquo;t have any high hopes at that time. This blog covers my journey of getting selected into the program from the very beginning.
+So everyone might be asking a question: What is Summer of Bitcoin?</description>
+    </item>
+    <item>
+      <title>Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22</title>
+      <link>https://ankur12-1610.github.io/posts/sob-part2/</link>
+      <pubDate>Wed, 24 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/sob-part2/</guid>
+      <description>Abstract This blog covers the work that I&amp;rsquo;ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json file, which acts as the local database of the user.
+Implementation Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.
+Change in plans Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren&amp;rsquo;t necessary.</description>
+    </item>
+    <item>
+      <title>Access tokens for Specter&#39;s REST API: Part 1 | Summer of Bitcoin &#39;22</title>
+      <link>https://ankur12-1610.github.io/posts/sob-part1/</link>
+      <pubDate>Sun, 03 Jul 2022 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/posts/sob-part1/</guid>
+      <description>Abstract Specter Desktop is a desktop GUI for Bitcoin Core optimized to work with hardware wallets.
+Specter already has a REST API system, but the authorization is currently done by HTTPBasicAuth and to improve the security, HTTPTokenAuth is really necessary. Access tokens would be a significant improvement.
+My Project I have to use access tokens for the token-based authorization, the access token I opted for was JSON Web Token (JWT) because:</description>
+    </item>
+  </channel>
+</rss>
