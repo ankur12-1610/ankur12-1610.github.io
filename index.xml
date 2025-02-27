@@ -82,13 +82,6 @@ Vim is rock stable and is continuously being developed to become even better. Am
 One way to do this is to show your visitors nerdy stats like how much coding you&amp;rsquo;ve been doing, what languages you have been working on and how productive you&amp;rsquo;ve been for the past few days.</description>
     </item>
     <item>
-      <title></title>
-      <link>https://ankur12-1610.github.io/resume/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://ankur12-1610.github.io/resume/</guid>
-      <description>about</description>
-    </item>
-    <item>
       <title>About Me</title>
       <link>https://ankur12-1610.github.io/aboutme/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -108,6 +101,13 @@ One way to do this is to show your visitors nerdy stats like how much coding you
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://ankur12-1610.github.io/projects/</guid>
       <description>projects</description>
+    </item>
+    <item>
+      <title>Resume</title>
+      <link>https://ankur12-1610.github.io/resume/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://ankur12-1610.github.io/resume/</guid>
+      <description> </description>
     </item>
   </channel>
 </rss>
