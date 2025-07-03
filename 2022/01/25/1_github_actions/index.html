@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Introduction:Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can buil">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Build your own Github Action and publish to the Github Marketplace!">
+<meta property="og:url" content="https://ankur12-16.github.io/2022/01/25/1_github_actions/index.html">
+<meta property="og:site_name" content="Ankur Patil">
+<meta property="og:description" content="Introduction:Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can buil">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643099582428/Rm7OkwDcT.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643108476459/G_Pp3FGQN.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643108651599/bk-ehQas_.png">
+<meta property="article:published_time" content="2022-01-24T18:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-03T07:18:10.013Z">
+<meta property="article:author" content="Ankur Patil">
+<meta property="article:tag" content="github-actions">
+<meta property="article:tag" content="github">
+<meta property="article:tag" content="automation">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1643099582428/Rm7OkwDcT.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/logo.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.ico" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.ico">
+        
+      
+    
+    <!-- title -->
+    <title>Build your own Github Action and publish to the Github Marketplace!</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C0Y1VZ254B');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Ankur Patil" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/05/20/spacevim/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2021/12/26/wakatime_stats/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/01/25/1_github_actions/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&text=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&is_video=false&description=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Build your own Github Action and publish to the Github Marketplace!&body=Check out this article: https://ankur12-16.github.io/2022/01/25/1_github_actions/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&name=Build your own Github Action and publish to the Github Marketplace!&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/01/25/1_github_actions/&t=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prerequisites"><span class="toc-number">2.</span> <span class="toc-text">Prerequisites:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Steps"><span class="toc-number">3.</span> <span class="toc-text">Steps:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How-others-can-use-my-Action"><span class="toc-number">4.</span> <span class="toc-text">How others can use my Action?:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Publish-the-Action-to-the-Marketplace"><span class="toc-number">5.</span> <span class="toc-text">Publish the Action to the Marketplace:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Build your own Github Action and publish to the Github Marketplace!
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ankur Patil</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-01-24T18:30:00.000Z" class="dt-published" itemprop="datePublished">2022-01-25</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/automation/" rel="tag">automation</a>, <a class="p-category" href="/tags/github/" rel="tag">github</a>, <a class="p-category" href="/tags/github-actions/" rel="tag">github-actions</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h3><p>Automation, complexity reduction, reproducibility, and maintainability are all advantages that can be realized by a continuous integration (CI) pipeline. With GitHub Actions, you can build these CI pipelines.</p>
+<blockquote>
+<p>“Automate, customize, and execute your software development workflows right in your repository with GitHub Actions. You can discover, create, and share actions to perform any job you’d like, including CI&#x2F;CD, and combine actions in a completely customized workflow.” - <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">Github Docs</a></p>
+</blockquote>
+<p>We all use Github Actions for code analysis, adding awesome Readme features and doing many other things. When I was first introduced to Github Actions I was dumbstruck and from then onwards it became my favorite section to explore. I started exploring it, used it in my profile Readme and it was really awesome.</p>
+<p>But the problem was I was using the products which were created by others and it kind of hurt me😅. So I was like - “Let’s create a Github Action on own and then publish it in the marketplace so that others can use it”. And guess what I did, you can check it on Github. In this blog we are going to make a Github Action so tighten your seat belt, it’ll be fun.</p>
+<iframe src="https://giphy.com/embed/BpGWitbFZflfSUYuZ9" width="380" height="300" class="giphy-embed"></iframe>
+
+<h3 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites:"></a>Prerequisites:</h3><ul>
+<li>A Github account</li>
+</ul>
+<h3 id="Steps"><a href="#Steps" class="headerlink" title="Steps:"></a>Steps:</h3><ul>
+<li><p>Create a Github repository with a license (any, I’ve used MIT License).</p>
+<p>  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1643099582428/Rm7OkwDcT.png" alt="createrepo.png"></p>
+</li>
+<li><p>Clone the repo to your local machine and open it in your favorite IDE.</p>
+</li>
+<li><p>Setup a node project with:</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm init</span><br></pre></td></tr></table></figure>
+
+<p>and install all the required packages by following commands:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm i @actions/core</span><br><span class="line">npm i @actions/exec</span><br><span class="line">npm i @actions/github</span><br><span class="line">npm i @vercel/ncc</span><br></pre></td></tr></table></figure>
+
+<p><code>@vercel/ncc</code> is a Simple CLI for compiling a Node.js module into a single file.</p>
+<ul>
+<li>After installing packages make sure to add this script in <code>package.json</code>:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">  &quot;build&quot;: &quot;ncc build src/main.js -o dist&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>This script is important as it runs <code>@vercel/ncc</code> which compiles all the files to a single file <code>dist/index.js</code>.</p>
+<ul>
+<li>Now, we create an <code>action.yml</code> file in our repository. The <code>action.yml</code> is the metadata file and defines the inputs, outputs, and main entry point for our Action.</li>
+</ul>
+<p>The <code>action.yml</code> file has to include:</p>
+<ul>
+<li><p><code>name</code>: The name of your Github Action.</p>
+</li>
+<li><p><code>description</code>: A short description of what your action is doing.</p>
+</li>
+<li><p><code>author</code>: The name of the author who created this Github Action.</p>
+</li>
+<li><p><code>inputs</code>: The input parameters which you can pass into your script.</p>
+</li>
+<li><p><code>runs</code>: Defines what the action will execute (in our case, it’ll run docker).</p>
+</li>
+<li><p><code>branding</code>: How your Github Action will look like when it is launched in the marketplace.</p>
+</li>
+</ul>
+<p>The <code>action.yml</code> file will look like-</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">name: Demo Issue Action 🛰</span><br><span class="line">description: Comments on the newly opened issue.</span><br><span class="line">author: ankur12-1610 &lt;anknerd.12@gmail.com&gt;</span><br><span class="line"></span><br><span class="line">inputs:</span><br><span class="line">  GITHUB_TOKEN:</span><br><span class="line">    description: Github token</span><br><span class="line">    required: true</span><br><span class="line">  ISSUE_COMMENT:</span><br><span class="line">    description: Comment to be added on opening an issue</span><br><span class="line">    required: true</span><br><span class="line"></span><br><span class="line">branding:</span><br><span class="line">  color: blue</span><br><span class="line">  icon: tag</span><br><span class="line"></span><br><span class="line">runs:</span><br><span class="line">  using: &#x27;docker&#x27;</span><br><span class="line">  image: &#x27;Dockerfile&#x27;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Now, create a folder namely <code>src</code> and in that create a file <code>main.js</code>. This file includes the main script of the action, it is like the brain of the action.</p>
+</li>
+<li><p>In our case, we are creating a Github Action which will comment on every issue created. For this, we need <code>@octokit/rest</code> npm package. It is the GitHub REST API client for JavaScript.</p>
+</li>
+</ul>
+<blockquote>
+<p>For its API endpoints and other details go through its <a target="_blank" rel="noopener" href="https://octokit.github.io/rest.js/v18">official docs</a>.</p>
+</blockquote>
+<ul>
+<li>So my <code>main.js</code> will look like this:</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">const core = require(&#x27;@actions/core&#x27;)</span><br><span class="line">const github = require(&#x27;@actions/github&#x27;)</span><br><span class="line"></span><br><span class="line">export async function run() &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">    const &#123; context &#125; = require(&#x27;@actions/github&#x27;)</span><br><span class="line"></span><br><span class="line">    //taking input from the core</span><br><span class="line">    const GITHUB_TOKEN = core.getInput(&#x27;GITHUB_TOKEN&#x27;)</span><br><span class="line">    const ISSUE_COMMENT = core.getInput(&#x27;ISSUE_COMMENT&#x27;)</span><br><span class="line">    </span><br><span class="line">    if ( typeof GITHUB_TOKEN !== &#x27;string&#x27; ) &#123;</span><br><span class="line">      throw new Error(&#x27;Invalid GITHUB_TOKEN: did you forget to set it in your action config?&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    if ( typeof ISSUE_COMMENT !== &#x27;string&#x27;) &#123;</span><br><span class="line">        throw new Error(&#x27;Invalid ISSUE_COMMENT field, it should be a string field&#x27;)</span><br><span class="line">    &#125;</span><br><span class="line">    const octokit = github.getOctokit(GITHUB_TOKEN) </span><br><span class="line">    const &#123; issue &#125; = context.payload</span><br><span class="line">    const payload = context.payload.issue</span><br><span class="line">    //comment on issue</span><br><span class="line">    await octokit.rest.issues.createComment(&#123;</span><br><span class="line">      ...context.repo,</span><br><span class="line">      issue_number: issue.number,</span><br><span class="line">      body: ISSUE_COMMENT,</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">  &#125; catch (e) &#123;</span><br><span class="line">    core.error(e)</span><br><span class="line">    core.setFailed(e.message)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">run()</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>The last step would be to create a file namely <code>Dockerfile</code>.</li>
+</ul>
+<blockquote>
+<p>If you are not familiar with Docker and Dockerfiles, check out <a target="_blank" rel="noopener" href="https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions">Dockerfile support for GitHub Actions</a>.</p>
+</blockquote>
+<p>The <code>Dockerfile</code> will look like:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FROM node:latest</span><br><span class="line"></span><br><span class="line">COPY . .</span><br><span class="line"></span><br><span class="line">RUN npm install --production</span><br><span class="line"></span><br><span class="line">ENTRYPOINT [&quot;node&quot;, &quot;/dist/index.js&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>That’s it. We’ve created our won Github Action. Now to test it, create a workflow file in <code>.github/workflows</code> and this code:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">name: &#x27;Demo Issue Action 🛰&#x27;</span><br><span class="line"></span><br><span class="line">on:</span><br><span class="line">  issues:</span><br><span class="line">    types:</span><br><span class="line">      - opened</span><br><span class="line"></span><br><span class="line">jobs:</span><br><span class="line">  test:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - uses: actions/checkout@v2</span><br><span class="line">      - name: 🔃 Install</span><br><span class="line">        run: |</span><br><span class="line">          yarn</span><br><span class="line">      - name: 🧱 Build</span><br><span class="line">        run: |</span><br><span class="line">          yarn build</span><br><span class="line">      - uses: ./</span><br><span class="line">        with:</span><br><span class="line">          GITHUB_TOKEN: $&#123;&#123; secrets.GITHUB_TOKEN &#125;&#125;</span><br><span class="line">          ISSUE_COMMENT:  &#x27;thanks for raising the issue&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="How-others-can-use-my-Action"><a href="#How-others-can-use-my-Action" class="headerlink" title="How others can use my Action?:"></a>How others can use my Action?:</h3><p>The answer is simple just paste the following code in the <code>.github/workflows</code> directory in required repo:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">name:  &#x27;Demo Issue Action 🛰&#x27;</span><br><span class="line"></span><br><span class="line">on:</span><br><span class="line">  issues:</span><br><span class="line">    types:</span><br><span class="line">      - opened</span><br><span class="line"></span><br><span class="line">jobs:</span><br><span class="line">  test:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - uses: actions/checkout@v2</span><br><span class="line">      - uses: ankur12-1610/demo-action@main</span><br><span class="line">        with:</span><br><span class="line">          GITHUB_TOKEN: $&#123;&#123; secrets.GITHUB_TOKEN &#125;&#125;</span><br><span class="line">          ISSUE_COMMENT:  &#x27;thanks for raising the issue&#x27; #enter custom message</span><br></pre></td></tr></table></figure>
+
+<p>And now we are all perfect to launch it in the Github Marketplace.</p>
+<h3 id="Publish-the-Action-to-the-Marketplace"><a href="#Publish-the-Action-to-the-Marketplace" class="headerlink" title="Publish the Action to the Marketplace:"></a>Publish the Action to the Marketplace:</h3><ul>
+<li><p>Go into the the <code>New Release</code> section and you will find this window:</p>
+<p>  <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1643108476459/G_Pp3FGQN.png" alt="launch.png"></p>
+</li>
+</ul>
+<p>Create new release tag, give release heading to the Action and publish it ;)</p>
+<ul>
+<li>Finally, we can find it on <a target="_blank" rel="noopener" href="https://github.com/marketplace">https://github.com/marketplace</a> by searching “Demo Issue Action 🛰”.</li>
+</ul>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1643108651599/bk-ehQas_.png" alt="marketplace.png"></p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion:"></a>Conclusion:</h3><p>Thank you for reading, hope you enjoyed the article! Queries and feedback are most welcome :) kindly leave them below.</p>
+<p>Follow me on <a target="_blank" rel="noopener" href="https://twitter.com/ankurrap">Twitter</a> | <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ankur-patil-a112a3202/">LinkedIn</a> for more web development-related tips and posts.</p>
+<p>That’s all for today! You have read the article till the end.</p>
+<iframe src="https://giphy.com/embed/6oB3X3W6MYM3C" width="480" height="268" class="giphy-embed"></iframe>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/me">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Prerequisites"><span class="toc-number">2.</span> <span class="toc-text">Prerequisites:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Steps"><span class="toc-number">3.</span> <span class="toc-text">Steps:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#How-others-can-use-my-Action"><span class="toc-number">4.</span> <span class="toc-text">How others can use my Action?:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Publish-the-Action-to-the-Marketplace"><span class="toc-number">5.</span> <span class="toc-text">Publish the Action to the Marketplace:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/01/25/1_github_actions/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&text=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&is_video=false&description=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Build your own Github Action and publish to the Github Marketplace!&body=Check out this article: https://ankur12-16.github.io/2022/01/25/1_github_actions/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&title=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/01/25/1_github_actions/&name=Build your own Github Action and publish to the Github Marketplace!&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/01/25/1_github_actions/&t=Build your own Github Action and publish to the Github Marketplace!"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025
+    Ankur Patil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

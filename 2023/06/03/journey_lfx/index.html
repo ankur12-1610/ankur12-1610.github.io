@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="I have always wanted to participate in the LFX Mentorship program and here I am, graduated, writing this blog. These 3 months were amazing! This blog covers my experience in this mentorship. What’s th">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My LFX Mentorship Journey with CNCF: Kubernetes">
+<meta property="og:url" content="https://ankur12-16.github.io/2023/06/03/journey_lfx/index.html">
+<meta property="og:site_name" content="Ankur Patil">
+<meta property="og:description" content="I have always wanted to participate in the LFX Mentorship program and here I am, graduated, writing this blog. These 3 months were amazing! This blog covers my experience in this mentorship. What’s th">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685733474885/cc6f5ca5-bc11-4ace-abbf-e90cdb3c4a18.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685733733861/3e42d773-7c2c-41f4-be92-7f4e671602c8.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685734786024/e99d702f-86f7-4bcd-afa9-9d0c05aa2a9d.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685734896030/9aa1069c-85a3-4577-b77e-a7a675d73738.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685736705764/fe6277b1-7176-4de3-8c76-a5801e67774a.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685737004421/bfa55c44-e890-4b31-bd42-9eb5507d0c57.png">
+<meta property="article:published_time" content="2023-06-02T18:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T19:04:59.332Z">
+<meta property="article:author" content="Ankur Patil">
+<meta property="article:tag" content="LFX Mentorship">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="Kubernetes">
+<meta property="article:tag" content="CNCF">
+<meta property="article:tag" content="Go Language">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1685733474885/cc6f5ca5-bc11-4ace-abbf-e90cdb3c4a18.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/logo.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.ico" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.ico">
+        
+      
+    
+    <!-- title -->
+    <title>My LFX Mentorship Journey with CNCF: Kubernetes</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C0Y1VZ254B');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Ankur Patil" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2024/01/02/hack_jwt/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/12/14/journey_sob/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2023/06/03/journey_lfx/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&text=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&is_video=false&description=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=My LFX Mentorship Journey with CNCF: Kubernetes&body=Check out this article: https://ankur12-16.github.io/2023/06/03/journey_lfx/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&name=My LFX Mentorship Journey with CNCF: Kubernetes&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2023/06/03/journey_lfx/&t=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#What%E2%80%99s-the-LFX-Mentorship"><span class="toc-number">1.</span> <span class="toc-text">What’s the LFX Mentorship?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#My-acceptance-into-the-program"><span class="toc-number">2.</span> <span class="toc-text">My acceptance into the program</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#So-what-did-you-do-during-mentorship"><span class="toc-number">3.</span> <span class="toc-text">So, what did you do during mentorship?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-I-Achieved-and-Scope-for-Improvement"><span class="toc-number">4.</span> <span class="toc-text">What I Achieved and Scope for Improvement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Is-it-difficult-to-get-accepted-into-this"><span class="toc-number">5.</span> <span class="toc-text">Is it difficult to get accepted into this?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graduation-and-concluding-it-all"><span class="toc-number">6.</span> <span class="toc-text">Graduation and concluding it all!</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        My LFX Mentorship Journey with CNCF: Kubernetes
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ankur Patil</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-06-02T18:30:00.000Z" class="dt-published" itemprop="datePublished">2023-06-03</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CNCF/" rel="tag">CNCF</a>, <a class="p-category" href="/tags/Go-Language/" rel="tag">Go Language</a>, <a class="p-category" href="/tags/Kubernetes/" rel="tag">Kubernetes</a>, <a class="p-category" href="/tags/LFX-Mentorship/" rel="tag">LFX Mentorship</a>, <a class="p-category" href="/tags/Open-Source/" rel="tag">Open Source</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>I have always wanted to participate in the <a target="_blank" rel="noopener" href="https://mentorship.lfx.linuxfoundation.org/">LFX Mentorship program</a> and here I am, graduated, writing this blog. These 3 months were amazing! This blog covers my experience in this mentorship.</p>
+<h3 id="What’s-the-LFX-Mentorship"><a href="#What’s-the-LFX-Mentorship" class="headerlink" title="What’s the LFX Mentorship?"></a>What’s the LFX Mentorship?</h3><blockquote>
+<p><em>“The Linux Foundation Mentorship Program is designed to help developers — many of whom are first-time open source contributors — with necessary skills and resources to learn, experiment, and contribute effectively to open source communities. By participating in a mentorship program, mentees have the opportunity to learn from experienced open source contributors as a segue to get internship and job opportunities upon graduation.”</em></p>
+</blockquote>
+<p>If you are interested in participating in the LFX Mentorship programs, you can find more information at <a target="_blank" rel="noopener" href="http://lfx.linuxfoundation.org/mentorship/guide">lfx.linuxfoundation.org&#x2F;mentorship&#x2F;guide</a>.</p>
+<h3 id="My-acceptance-into-the-program"><a href="#My-acceptance-into-the-program" class="headerlink" title="My acceptance into the program"></a>My acceptance into the program</h3><p>Once the application process began, I drafted a cover letter and I was contributing to <a target="_blank" rel="noopener" href="https://mentorship.lfx.linuxfoundation.org/project/ca622980-cc8c-4f18-8a74-b9a7b4b49e3a">TestGrid</a> for some time which I included in my cover letter, which I believe helped me stand out from other candidates.</p>
+<p>I want to emphasize that contributions matter a lot. If you are interested in a particular organization, I encourage you to find ways to contribute to their community or projects. This is a great way to show your interest in the organization and your ability to add value.</p>
+<p>I applied to 3 organizations (<strong>Kubernetes, Harbor and Cortex</strong>), Kubernetes accepted me first, so my applications to the other two organizations were no longer considered.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685733474885/cc6f5ca5-bc11-4ace-abbf-e90cdb3c4a18.png"></p>
+<h3 id="So-what-did-you-do-during-mentorship"><a href="#So-what-did-you-do-during-mentorship" class="headerlink" title="So, what did you do during mentorship?"></a>So, what did you do during mentorship?</h3><p>I contributed to <a target="_blank" rel="noopener" href="https://mentorship.lfx.linuxfoundation.org/project/ca622980-cc8c-4f18-8a74-b9a7b4b49e3a"><strong>CNCF - TestGrid: Frontend development inside Lit Component Framework</strong></a> project.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685733733861/3e42d773-7c2c-41f4-be92-7f4e671602c8.png"></p>
+<p>TestGrid’s Core contributors <a target="_blank" rel="noopener" href="https://github.com/michelle192837"><strong>Michelle Shepardson</strong></a> and <a target="_blank" rel="noopener" href="https://github.com/chases2"><strong>Sean Chase</strong></a> were my mentors. I had weekly sync-up meetings with them. In this meeting, we reviewed the goals we set in our previous meetings, discussed the progress, reviewed PRs I made, and identified any new goals or objectives that I would like to work towards.</p>
+<p><strong>Stepwise progress:</strong></p>
+<p><strong>Frontend</strong>:</p>
+<p>The first step was to set up an existing webapp with Tailwind, after searching it was found that having normal plain old CSS is suited for Lit Framework. Therefore, we decided to build our components on top of plain old CSS.</p>
+<p>Next, I implemented the index of TestGrid which rendered dashboard and dashboard groups components. The image shows the end result of the index.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685734786024/e99d702f-86f7-4bcd-afa9-9d0c05aa2a9d.png"></p>
+<p>Implemented the onClick functionality to render particular dashboards when clicked on a dashboard group. Refer to this image:</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685734896030/9aa1069c-85a3-4577-b77e-a7a675d73738.png"></p>
+<p>After implementing the index, Sean asked me to write StoryBook and Unit tests, following the Test-Driven Development (TDD) methodology. This was my first time writing Storybook tests, and I found it to be a fun and rewarding experience.</p>
+<p>I also decluttered the codebase by removing any unused or duplicate code.</p>
+<p>The final task which revolved around fronted was to reiterate and improve the written tests.</p>
+<p><strong>Backend</strong>:</p>
+<p>After, implementing the index, there was some problem in the API structure which made the frontend do the heavy work. Hence, compromising the user experience.</p>
+<p>After discussing it with my mentors we decided that the API structure needs to be improved and I was set to start my GO journey, was really excited!</p>
+<p>I really want to thank Michelle and Sean (my mentors) as they helped me get familiar with every piece of information related to API and GO. Before actually working on the codebase, I read all the resources first and got familiar with protubufs and GO.</p>
+<p>There were two tasks assigned to me;</p>
+<p><strong>Task1: (refer to issue</strong> <a target="_blank" rel="noopener" href="https://github.com/GoogleCloudPlatform/testgrid/issues/1199"><strong>#1199</strong></a>)</p>
+<p>The frontend required to do heavy work because the dashboards were not linked to their respective dashboard groups. The solution was simple, just add a reference to every dashboard of their dashboard group. I updated the API proto, wrote the governing functions, and finally updated the tests.</p>
+<p><strong>Task2: (refer to issue</strong> <a target="_blank" rel="noopener" href="https://github.com/GoogleCloudPlatform/testgrid/issues/1200"><strong>#1200</strong></a>)</p>
+<p>Currently, TestGrid doesn’t have an endpoint that shows the config in a short and clear way. The information we get related to a particular tab is by fetching headers or rows. The end goal was to add a new endpoint that shows all the valid and important information related to the dashboard tab.</p>
+<p>I started by creating a new resource in the API proto. Later on, I added the governing functions which fetch the equivalent data. Finally registered a new endpoint to the server.</p>
+<h3 id="What-I-Achieved-and-Scope-for-Improvement"><a href="#What-I-Achieved-and-Scope-for-Improvement" class="headerlink" title="What I Achieved and Scope for Improvement"></a>What I Achieved and Scope for Improvement</h3><p>I was having real fun working on this project and have <strong>closed 5 PRs and have 1 PR in progress</strong>.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685736705764/fe6277b1-7176-4de3-8c76-a5801e67774a.png"></p>
+<p>Currently, the Task2 PR is still a work in progress, my goal is to complete the task and get the WIP PR merged.</p>
+<p>I am also looking forward to contributing to Kubernetes in the future.</p>
+<h3 id="Is-it-difficult-to-get-accepted-into-this"><a href="#Is-it-difficult-to-get-accepted-into-this" class="headerlink" title="Is it difficult to get accepted into this?"></a>Is it difficult to get accepted into this?</h3><p>I would say a big NO!!!</p>
+<p>I personally started checking out the projects a few weeks before the applications started.</p>
+<p><em>It is all about how willing are you to contribute to the community and learn new things</em> which at the start might seem a little bit overwhelming. Before LFX, I was a beginner in GO but during my mentorship period, I worked on an API written in GO.</p>
+<p>Don’t hesitate, give it a try. You will learn a lot!</p>
+<blockquote>
+<p>If you’re interested in joining the LFX Mentorship like I was, <a target="_blank" rel="noopener" href="https://mentorship.lfx.linuxfoundation.org/#projects_accepting"><strong>submit your proposal here</strong></a>!</p>
+</blockquote>
+<h3 id="Graduation-and-concluding-it-all"><a href="#Graduation-and-concluding-it-all" class="headerlink" title="Graduation and concluding it all!"></a>Graduation and concluding it all!</h3><p>After 12 weeks, I successfully graduated from the program-</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1685737004421/bfa55c44-e890-4b31-bd42-9eb5507d0c57.png"></p>
+<p>I’m really grateful to my mentors <a target="_blank" rel="noopener" href="https://github.com/michelle192837"><strong>Michelle Shepardson</strong></a> and <a target="_blank" rel="noopener" href="https://github.com/chases2"><strong>Sean Chase</strong></a> for helping me throughout the project. Additionally, a big thanks to <a target="_blank" rel="noopener" href="https://github.com/sultan-duisenbay"><strong>Sultan Duisenbay</strong></a><strong>,</strong> who helped me a lot as well!</p>
+<p>I would like to express my sincere gratitude to the Kubernetes, LFX, and CNCF communities. Without their support, neither this project nor this program would have been possible.</p>
+<p>For doubts and questions feel free to contact me: <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ankur-patil-a112a3202/"><strong>LinkedIn</strong></a> <strong>|</strong> <a target="_blank" rel="noopener" href="http://mailto:ankur.patil.012@gmail.com/"><strong>Gmail</strong></a></p>
+<p>Thank you for reading, hope you enjoyed the article! Follow me on <a target="_blank" rel="noopener" href="https://twitter.com/ankurrap"><strong>Twitter</strong></a> | <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ankur-patil-a112a3202/"><strong>LinkedIn</strong></a> for more development-related posts. That’s all for today! Thank you for reading :)</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/me">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#What%E2%80%99s-the-LFX-Mentorship"><span class="toc-number">1.</span> <span class="toc-text">What’s the LFX Mentorship?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#My-acceptance-into-the-program"><span class="toc-number">2.</span> <span class="toc-text">My acceptance into the program</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#So-what-did-you-do-during-mentorship"><span class="toc-number">3.</span> <span class="toc-text">So, what did you do during mentorship?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-I-Achieved-and-Scope-for-Improvement"><span class="toc-number">4.</span> <span class="toc-text">What I Achieved and Scope for Improvement</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Is-it-difficult-to-get-accepted-into-this"><span class="toc-number">5.</span> <span class="toc-text">Is it difficult to get accepted into this?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Graduation-and-concluding-it-all"><span class="toc-number">6.</span> <span class="toc-text">Graduation and concluding it all!</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2023/06/03/journey_lfx/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&text=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&is_video=false&description=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=My LFX Mentorship Journey with CNCF: Kubernetes&body=Check out this article: https://ankur12-16.github.io/2023/06/03/journey_lfx/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&title=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2023/06/03/journey_lfx/&name=My LFX Mentorship Journey with CNCF: Kubernetes&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2023/06/03/journey_lfx/&t=My LFX Mentorship Journey with CNCF: Kubernetes"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025
+    Ankur Patil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

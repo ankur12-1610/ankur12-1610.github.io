@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key! JWT tokensIntroduction JSON Web Token (JWT) is an open standard">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hacking JWT Tokens: By Bruteforcing Weak Signing Key">
+<meta property="og:url" content="https://ankur12-16.github.io/2024/01/02/hack_jwt/index.html">
+<meta property="og:site_name" content="Ankur Patil">
+<meta property="og:description" content="This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key! JWT tokensIntroduction JSON Web Token (JWT) is an open standard">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196450773-c13f06b8-5fff-4c46-a5c2-3ed9edabc093.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196449704-fb0fc5ba-6b1f-4414-89ce-50c908f347f7.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196461005-f53cad09-472c-4fa9-b11a-e76857ec5689.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196462855-a856240c-56eb-4b41-8d5f-5b8636a21736.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196610094-e1dac5fd-441b-484b-a010-1eb5fa9f4eec.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196610338-e1687f73-4974-4e0b-bedf-fc36ededa24e.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196611018-98564f27-161e-47b1-be41-ca070cb9b340.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196611821-f6f05e27-fc56-4b16-bbcf-d5ee2c4d2f8c.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196613036-990d3989-74fb-4c06-8586-a3107e86d6e4.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196614220-35db0341-788a-43e8-8bdb-fe885386ebfa.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196614923-94b2cc63-ad0e-42a9-b13d-c6274794fdc0.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/76884959/196615470-3719f817-7e51-495c-b291-67061c1d6f10.png">
+<meta property="article:published_time" content="2024-01-01T18:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T19:04:28.569Z">
+<meta property="article:author" content="Ankur Patil">
+<meta property="article:tag" content="JWT">
+<meta property="article:tag" content="Security">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/76884959/196450773-c13f06b8-5fff-4c46-a5c2-3ed9edabc093.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/logo.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.ico" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.ico">
+        
+      
+    
+    <!-- title -->
+    <title>Hacking JWT Tokens: By Bruteforcing Weak Signing Key</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C0Y1VZ254B');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Ankur Patil" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2023/06/03/journey_lfx/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2024/01/02/hack_jwt/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&text=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&is_video=false&description=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking JWT Tokens: By Bruteforcing Weak Signing Key&body=Check out this article: https://ankur12-16.github.io/2024/01/02/hack_jwt/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&name=Hacking JWT Tokens: By Bruteforcing Weak Signing Key&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2024/01/02/hack_jwt/&t=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT-tokens"><span class="toc-number">1.</span> <span class="toc-text">JWT tokens</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How-it-works"><span class="toc-number">1.2.</span> <span class="toc-text">How it works?</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Scenario"><span class="toc-number">2.</span> <span class="toc-text">Initial Scenario</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">3.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-1"><span class="toc-number">3.1.</span> <span class="toc-text">Step 1:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-2"><span class="toc-number">3.2.</span> <span class="toc-text">Step 2:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-3"><span class="toc-number">3.3.</span> <span class="toc-text">Step 3:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-4"><span class="toc-number">3.4.</span> <span class="toc-text">Step 4:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-5"><span class="toc-number">3.5.</span> <span class="toc-text">Step 5:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-6"><span class="toc-number">3.6.</span> <span class="toc-text">Step 6:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-7"><span class="toc-number">3.7.</span> <span class="toc-text">Step 7:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-8"><span class="toc-number">3.8.</span> <span class="toc-text">Step 8:</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Hacking JWT Tokens: By Bruteforcing Weak Signing Key
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ankur Patil</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2024-01-01T18:30:00.000Z" class="dt-published" itemprop="datePublished">2024-01-02</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/JWT/" rel="tag">JWT</a>, <a class="p-category" href="/tags/Security/" rel="tag">Security</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <p>This is the way of hacking JWT tokens signed using weak keys. We will be using John The Ripper for determining the correct signing key!</p>
+<h3 id="JWT-tokens"><a href="#JWT-tokens" class="headerlink" title="JWT tokens"></a>JWT tokens</h3><h4 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h4><blockquote>
+<p>JSON Web Token (JWT) is an open standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret with the <a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/hmac-algorithm-in-computer-network/">HMAC algorithm</a>.</p>
+</blockquote>
+<p>JWT Tokens consist of three parts seperated by dots (<code>.</code>), which are:</p>
+<ul>
+<li><p>Header</p>
+</li>
+<li><p>Payload</p>
+</li>
+<li><p>Signature</p>
+</li>
+</ul>
+<p>JWT Token typically looks like: <code>aaaa.bbbb.cccc</code></p>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196450773-c13f06b8-5fff-4c46-a5c2-3ed9edabc093.png" alt="encoded-jwt3"></p>
+</blockquote>
+<p>Breaking down the different parts:</p>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196449704-fb0fc5ba-6b1f-4414-89ce-50c908f347f7.png"></p>
+</blockquote>
+<h4 id="How-it-works"><a href="#How-it-works" class="headerlink" title="How it works?"></a>How it works?</h4><ul>
+<li>The whole process is called <strong>signing the JWT token</strong>. The signing algorithm takes the header, the payload, and the secret to create a unique signature.</li>
+</ul>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196461005-f53cad09-472c-4fa9-b11a-e76857ec5689.png" alt="bOHqZ"></p>
+</blockquote>
+<ul>
+<li>Next step is the verification of the token, once the JWT is received, the verification will take its header and payload, and together with the secret that is still saved on the server, basically create a test signature. But the original signature that was generated when the JWT was first created is still in the token, right? And that’s the key to this verification. Because now all we have to do is to compare the test signature with the original signature. And if the test signature is the same as the original signature, then it means that the payload and the header have not been modified.</li>
+</ul>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196462855-a856240c-56eb-4b41-8d5f-5b8636a21736.png" alt="b2dzI"></p>
+</blockquote>
+<h3 id="Initial-Scenario"><a href="#Initial-Scenario" class="headerlink" title="Initial Scenario"></a>Initial Scenario</h3><p>The scenario consists of a REST API running on a target machine and uses JWT-based authorization.</p>
+<blockquote>
+<p><strong>Note</strong>: The signing key used for token generation is weak and the REST API is present in the repo itself.</p>
+</blockquote>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><h4 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1:"></a>Step 1:</h4><p>Check the presence oh the REST API.<br><strong>Command</strong>: <code>curl 127.0.0.1:500</code></p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196610094-e1dac5fd-441b-484b-a010-1eb5fa9f4eec.png"></p>
+<h4 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2:"></a>Step 2:</h4><p>Getting the JWt Token for the user with username <code>user1</code>.<br><strong>Command</strong>: <code>curl --location --request GET &#39;</code><a target="_blank" rel="noopener" href="http://127.0.0.1:5000/login"><code>http://127.0.0.1:5000/login</code></a><code>&#39; \ --header &#39;Authorization: Basic dXNlcjE6ODk4OQ==&#39; \ --data-raw &#39;&#39;</code></p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196610338-e1687f73-4974-4e0b-bedf-fc36ededa24e.png"></p>
+<p>The response contains the JWT Token for the user.</p>
+<h4 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3:"></a>Step 3:</h4><p>Decoding the token header and payload parts using <a target="_blank" rel="noopener" href="https://jwt.io/">https://jwt.io</a>.</p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196611018-98564f27-161e-47b1-be41-ca070cb9b340.png"></p>
+<p>The token uses HS256 algorithm (a symmetric signing key algorithm).</p>
+<p>Since it is mentioned in the challenge description that a weak secret key has been used to sign the token and the constraints on the key are also specified, a bruteforce attack could be used to disclose the correct secret key.</p>
+<h4 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4:"></a>Step 4:</h4><p>We’ll be using John The Ripper (jtr) for performing the bruteforce attack. For installing jtr follow the give command: <code>sudo apt-get install john -y</code> or <code>sudo snap install john-the-ripper</code></p>
+<p>To check if it is installed type <code>john</code> in the terminal.</p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196611821-f6f05e27-fc56-4b16-bbcf-d5ee2c4d2f8c.png"></p>
+<h4 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5:"></a>Step 5:</h4><p>Save the JWT Token obtained in Step 2 into a file called <code>jwt.txt</code>.</p>
+<h4 id="Step-6"><a href="#Step-6" class="headerlink" title="Step 6:"></a>Step 6:</h4><p>Generate a wordlist used for brute-forcing the signing-key: Save the following Python script as <a target="_blank" rel="noopener" href="http://generate-wordlist.py/"><code>generate-wordlist.py</code></a>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">fp = open(&quot;wordlist.txt&quot;, &quot;w&quot;)</span><br><span class="line"></span><br><span class="line">for i in range (10):</span><br><span class="line">  for j in range (10):</span><br><span class="line">    for k in range (10):</span><br><span class="line">      for l in range (10):</span><br><span class="line">        fp.write(str(i) + str(j) + str(k) + str(l) + &quot;\n&quot;);</span><br><span class="line"></span><br><span class="line">fp.close()</span><br></pre></td></tr></table></figure>
+
+<p>Run the above python script to generate the wordlist. <strong>Command</strong>: <code>python3</code> <a target="_blank" rel="noopener" href="http://generate-wordlist.py/"><code>generate-wordlist.py</code></a></p>
+<h4 id="Step-7"><a href="#Step-7" class="headerlink" title="Step 7:"></a>Step 7:</h4><p>The final step is to burte-force the signing key: <strong>Command</strong>: <code>john jwt.txt --wordlist=wordlist.txt --format=HMAC-SHA256</code></p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196613036-990d3989-74fb-4c06-8586-a3107e86d6e4.png"></p>
+<h4 id="Step-8"><a href="#Step-8" class="headerlink" title="Step 8:"></a>Step 8:</h4><p>Since the secret key for signing the token is known, it can be used to create a valid token. Use <a target="_blank" rel="noopener" href="https://jwt.io/">https://jwt.io</a> to create a new token. Over here we change the username of the user in order to obtain a new token which can only be used by <code>user2</code> and not <code>user1</code>. Since the signing key is already known, the username of the user could be changed and the corresponding token would be generated.</p>
+<p><img src="https://user-images.githubusercontent.com/76884959/196614220-35db0341-788a-43e8-8bdb-fe885386ebfa.png"></p>
+<p>Now this forged token will allow <code>user1</code> to access the secrets which were only allowed to <code>user2</code>.</p>
+<p><code>user1</code> is authenticated and the user is able to see the secret namely, <code>password1</code> for the token generated with the username-<code>user1</code></p>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196614923-94b2cc63-ad0e-42a9-b13d-c6274794fdc0.png"></p>
+</blockquote>
+<p>Now, as the new token is forged, <code>user1</code> has the token corresponding to <code>user2</code>. which enables <code>user1</code> to get an acess to <code>user2</code>‘s secret.</p>
+<blockquote>
+<p><img src="https://user-images.githubusercontent.com/76884959/196615470-3719f817-7e51-495c-b291-67061c1d6f10.png"></p>
+</blockquote>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/me">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JWT-tokens"><span class="toc-number">1.</span> <span class="toc-text">JWT tokens</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Introduction"><span class="toc-number">1.1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#How-it-works"><span class="toc-number">1.2.</span> <span class="toc-text">How it works?</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initial-Scenario"><span class="toc-number">2.</span> <span class="toc-text">Initial Scenario</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">3.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-1"><span class="toc-number">3.1.</span> <span class="toc-text">Step 1:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-2"><span class="toc-number">3.2.</span> <span class="toc-text">Step 2:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-3"><span class="toc-number">3.3.</span> <span class="toc-text">Step 3:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-4"><span class="toc-number">3.4.</span> <span class="toc-text">Step 4:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-5"><span class="toc-number">3.5.</span> <span class="toc-text">Step 5:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-6"><span class="toc-number">3.6.</span> <span class="toc-text">Step 6:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-7"><span class="toc-number">3.7.</span> <span class="toc-text">Step 7:</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Step-8"><span class="toc-number">3.8.</span> <span class="toc-text">Step 8:</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2024/01/02/hack_jwt/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&text=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&is_video=false&description=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Hacking JWT Tokens: By Bruteforcing Weak Signing Key&body=Check out this article: https://ankur12-16.github.io/2024/01/02/hack_jwt/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&title=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2024/01/02/hack_jwt/&name=Hacking JWT Tokens: By Bruteforcing Weak Signing Key&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2024/01/02/hack_jwt/&t=Hacking JWT Tokens: By Bruteforcing Weak Signing Key"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025
+    Ankur Patil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

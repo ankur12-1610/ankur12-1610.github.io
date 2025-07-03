@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="AbstractThis blog covers the work that I’ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json fi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22">
+<meta property="og:url" content="https://ankur12-16.github.io/2022/08/24/sob_part2/index.html">
+<meta property="og:site_name" content="Ankur Patil">
+<meta property="og:description" content="AbstractThis blog covers the work that I’ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the users.json fi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1661089000351/t30ABhBO4.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093571428/CoC17nm2R.png?height=300">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093416372/fluUiPHfz.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1661254215989/sfft5Y8a4.png">
+<meta property="article:published_time" content="2022-08-23T18:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T19:05:44.502Z">
+<meta property="article:author" content="Ankur Patil">
+<meta property="article:tag" content="Open Source">
+<meta property="article:tag" content="JWT">
+<meta property="article:tag" content="Summer of Bitcoin">
+<meta property="article:tag" content="Flask Framework">
+<meta property="article:tag" content="Bitcoin">
+<meta property="article:tag" content="REST API">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1661089000351/t30ABhBO4.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/logo.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.ico" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.ico">
+        
+      
+    
+    <!-- title -->
+    <title>Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C0Y1VZ254B');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Ankur Patil" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/12/14/journey_sob/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/07/03/sob_part1/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/08/24/sob_part2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&text=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&is_video=false&description=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22&body=Check out this article: https://ankur12-16.github.io/2022/08/24/sob_part2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&name=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/08/24/sob_part2/&t=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">2.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Change-in-plans"><span class="toc-number">2.1.</span> <span class="toc-text">Change in plans</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Token-Authentication"><span class="toc-number">2.2.</span> <span class="toc-text">Token Authentication</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Time-Parser"><span class="toc-number">2.3.</span> <span class="toc-text">Time Parser</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Helper-Functions"><span class="toc-number">2.4.</span> <span class="toc-text">Helper Functions</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Endpoints"><span class="toc-number">3.</span> <span class="toc-text">Endpoints</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Project-Details"><span class="toc-number">4.</span> <span class="toc-text">Project Details:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future-Idea"><span class="toc-number">5.</span> <span class="toc-text">Future Idea:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Learning"><span class="toc-number">6.</span> <span class="toc-text">Learning:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Special-Thanks"><span class="toc-number">7.</span> <span class="toc-text">Special Thanks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">8.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ankur Patil</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-08-23T18:30:00.000Z" class="dt-published" itemprop="datePublished">2022-08-24</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Bitcoin/" rel="tag">Bitcoin</a>, <a class="p-category" href="/tags/Flask-Framework/" rel="tag">Flask Framework</a>, <a class="p-category" href="/tags/JWT/" rel="tag">JWT</a>, <a class="p-category" href="/tags/Open-Source/" rel="tag">Open Source</a>, <a class="p-category" href="/tags/REST-API/" rel="tag">REST API</a>, <a class="p-category" href="/tags/Summer-of-Bitcoin/" rel="tag">Summer of Bitcoin</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h3 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h3><p>This blog covers the work that I’ve done post mid-term evaluation. In the last part, I implemented the token generation part which included generating and saving the token in the <code>users.json</code> file, which acts as the local database of the user.</p>
+<h3 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h3><p>Some things took a considerable amount of time and energy, as they needed to be discussed with the mentors.</p>
+<h4 id="Change-in-plans"><a href="#Change-in-plans" class="headerlink" title="Change in plans"></a>Change in plans</h4><iframe src="https://giphy.com/embed/l3q2waulCQqmLNY3K" width="300" height="300" class="giphy-embed"></iframe>
+
+<p>Initially, the data was stored in individual entities, which resulted in creating several hashmaps which weren’t necessary. After discussing with Kim and Manolis, we concluded that all the information related to the JWT tokens should be stored in a nested hashmap instead of storing it in separate entities. Storing it in separate entities created unnecessary crowding of variables and a nested hashmap was perfect to tackle this problem.</p>
+<p>The fields related to the JWT token that needed to be stored:</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661089000351/t30ABhBO4.png" alt="jwt-fields.png"></p>
+<ul>
+<li>Earlier, the data was stored in the format:</li>
+</ul>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093571428/CoC17nm2R.png?height=300" alt="json-before.png"></p>
+<ul>
+<li>Later, the data was stored in the format of nested hashmap:</li>
+</ul>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661093416372/fluUiPHfz.png" alt="json-after.png"></p>
+<h4 id="Token-Authentication"><a href="#Token-Authentication" class="headerlink" title="Token Authentication"></a>Token Authentication</h4><p>Implementing Token Authentication was the most important and challenging part of this project. Specter used <a target="_blank" rel="noopener" href="https://flask-httpauth.readthedocs.io/en/latest/index.html"><code>Flask-HTTPAuth</code></a> for their Basic Authentication, which I was not entirely familiar with ;’)</p>
+<p>After reading the documentation and experimenting with the Token Authentication part in a small project, I cleared my basic concepts and hoped on the project’s codebase.</p>
+<p>The first step was to decode the JWT token to get the payload, and from that payload, I grepped the <code>username</code> of the user.</p>
+<p>The next step was to get the user from username with the help of Specter’s <code>user_manager</code> and then store it in the global user.</p>
+<p>The final check was to add <code>jwt.ExpiredSignatureError</code>, to check whether the token is expired or not and <code>jwt.InvalidTokenError</code>, to check whether the token is in a valid format or not.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1661254215989/sfft5Y8a4.png" alt="token-auth.png"></p>
+<h4 id="Time-Parser"><a href="#Time-Parser" class="headerlink" title="Time Parser"></a>Time Parser</h4><p>The expiration time in the payload while encoding the token could only be set to either seconds or minutes or days or any time unit. The problem was that, if the standard time is set to seconds and the user wants his token to be valid for 3 days, he might need to convert 3 days to seconds.</p>
+<p>In order to avoid this, I used <code>pytimeparser</code>, which basically converts the string into seconds. For eg: If the user sets the time to <code>3 days</code> then the parser will convert it to seconds (3 days &#x3D; 259200 seconds) and then it can be easily stored in the database. Similarly, the user can set the token life to <code>3 minutes</code>, <code>3 weeks</code>, <code>3 months</code> and other time units as well.</p>
+<blockquote>
+<p>Note: For more information regarding <code>pytimeparser</code> visit: <a target="_blank" rel="noopener" href="https://pypi.org/project/pytimeparse/">https://pypi.org/project/pytimeparse/</a></p>
+</blockquote>
+<h4 id="Helper-Functions"><a href="#Helper-Functions" class="headerlink" title="Helper Functions"></a>Helper Functions</h4><p>Building these functions made the implementation a lot easier, once written they can be used anywhere and one helper function helped me build other helper functions.</p>
+<p>For example:<br>The helper functions for saving a newly created token to the database and deleting the token from the database.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">def add_jwt_token(</span><br><span class="line">    self, jwt_token_id, jwt_token, jwt_token_description, jwt_token_life</span><br><span class="line">):</span><br><span class="line">    # Adding a newly created JWT to the hashmap</span><br><span class="line">    self.jwt_tokens[jwt_token_id] = &#123;&#125;</span><br><span class="line">    self.jwt_tokens[jwt_token_id][&quot;jwt_token&quot;] = jwt_token</span><br><span class="line">    self.jwt_tokens[jwt_token_id][&quot;jwt_token_description&quot;] = jwt_token_description</span><br><span class="line">    self.jwt_tokens[jwt_token_id][&quot;jwt_token_life&quot;] = jwt_token_life</span><br><span class="line">    self.save_info()</span><br><span class="line"></span><br><span class="line">def delete_jwt_token(self, jwt_token_id):</span><br><span class="line">    # Deleting a JWT from the hashmap</span><br><span class="line">    if jwt_token_id in self.jwt_tokens:</span><br><span class="line">        del self.jwt_tokens[jwt_token_id]</span><br><span class="line">        self.save_info()</span><br></pre></td></tr></table></figure>
+
+<h3 id="Endpoints"><a href="#Endpoints" class="headerlink" title="Endpoints"></a>Endpoints</h3><ul>
+<li><code>/v1alpha/token/</code>: Creating new tokens and fetching all of them.</li>
+</ul>
+<p>** Method **: <code>POST</code></p>
+<p><strong>Code</strong>: <code>201 Created</code></p>
+<p><strong>Request Body</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;jwt_token_description&quot;: &quot;Token alpha&quot;,</span><br><span class="line">    &quot;jwt_token_life&quot;: &quot;6 minutes&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Success Response</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &quot;Token generated&quot;,</span><br><span class="line">    &quot;jwt_token_id&quot;: &quot;2bc0160d-edf4-4ab6-9801-52d185f65b59&quot;,</span><br><span class="line">    &quot;jwt_token&quot;: &quot;eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiand0X3Rva2VuX2lkIjoiMmJjMDE2MGQtZWRmNC00YWI2LTk4MDEtNTJkMTg1ZjY1YjU5Iiwiand0X3Rva2VuX2Rlc2NyaXB0aW9uIjoiVG9rZW4gYWxwaGEiLCJleHAiOjE2NjEzMTg3NjIsImlhdCI6MTY2MTMxODQwMn0.MWbUuZ8BS5L9kryi_zG_PNJ4ud84mPuJhsqhiH_U5Rc&quot;,</span><br><span class="line">    &quot;jwt_token_description&quot;: &quot;Token alpha&quot;,</span><br><span class="line">    &quot;jwt_token_life&quot;: 360</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Method</strong>: <code>GET</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &quot;Tokens exists&quot;,</span><br><span class="line">    &quot;jwt_tokens&quot;: &#123;</span><br><span class="line">        &quot;edd6a8f7-47d8-405e-97a8-2e4e26d0fbeb&quot;: &#123;</span><br><span class="line">            &quot;jwt_token_description&quot;: &quot;Token 1&quot;,</span><br><span class="line">            &quot;jwt_token_life&quot;: 480,</span><br><span class="line">            &quot;jwt_token_remaining_life&quot;: 0</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;2bc0160d-edf4-4ab6-9801-52d185f65b59&quot;: &#123;</span><br><span class="line">            &quot;jwt_token_description&quot;: &quot;Token alpha&quot;,</span><br><span class="line">            &quot;jwt_token_life&quot;: 360,</span><br><span class="line">            &quot;jwt_token_remaining_life&quot;: 232.19542360305786</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>/v1alpha/token/&lt;token_id&gt;</code>: Fetching and deleting a particular token by Id.</li>
+</ul>
+<p><strong>Method</strong>: <code>GET</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &quot;Tokens exists&quot;,</span><br><span class="line">    &quot;jwt_token_description&quot;: &quot;Token alpha&quot;,</span><br><span class="line">    &quot;jwt_token_life&quot;: 360,</span><br><span class="line">    &quot;jwt_token_life_remaining&quot;: 232.19542360305786,</span><br><span class="line">    &quot;expiry_status&quot;: &quot;Valid&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Method</strong>: <code>DELETE</code></p>
+<p><strong>Code</strong>: <code>200 OK</code></p>
+<p><strong>Success Response</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;message&quot;: &quot;Token deleted&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Project-Details"><a href="#Project-Details" class="headerlink" title="Project Details:"></a>Project Details:</h3><blockquote>
+<p>For more info, visit the PR related to this project: <a target="_blank" rel="noopener" href="https://github.com/cryptoadvance/specter-desktop/pull/1785">https://github.com/cryptoadvance/specter-desktop/pull/1785</a></p>
+</blockquote>
+<h3 id="Future-Idea"><a href="#Future-Idea" class="headerlink" title="Future Idea:"></a>Future Idea:</h3><iframe src="https://giphy.com/embed/ZZkCo8zKWtt2ZgozfX" width="400" height="300" class="giphy-embed"></iframe>
+
+<p>This implementation of `JWT Token-Based Authentication` is fairly straightforward and clearly helps improve the security of Specter’s API.</p>
+<p>The following things can be added to the project:</p>
+<ul>
+<li><p>creating a UI for it</p>
+</li>
+<li><p>adding one more property to tokens, namely <code>endpoints</code> which will store the endpoints the user can access</p>
+</li>
+</ul>
+<h3 id="Learning"><a href="#Learning" class="headerlink" title="Learning:"></a>Learning:</h3><iframe src="https://giphy.com/embed/fhAwk4DnqNgw8" width="350" height="210" class="giphy-embed"></iframe>
+
+<p>- Through this journey, I learned a lot about how open source projects work, getting involved with the community, and contributing to the projects. - The major learning for me was how familiar I got with `Flask-RESTful` framework and `Flask-HTTPAuth`.</p>
+<h3 id="Special-Thanks"><a href="#Special-Thanks" class="headerlink" title="Special Thanks"></a>Special Thanks</h3><iframe src="https://giphy.com/embed/3o6Zt6KHxJTbXCnSvu" width="350" height="200" class="giphy-embed"></iframe>
+
+<p>It was an awesome experience for me to work on this project. I learned a lot of new things, Kim and Manolis really helped me whenever I got stuck.</p>
+<p>I would also like to give Adi Shankara and Summer of Bitcoin for this amazing learning experience. I was able to develop great skills and valuable experience. I look forward to contributing to the Bitcoin space.</p>
+<p>Also, super thanks for the Ledger Nano S and an awesome Swag Kit ;) ment</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion:"></a>Conclusion:</h3><iframe src="https://giphy.com/embed/3o6Mb5M2dmWNNzrSE0" width="300" height="270" class="giphy-embed"></iframe>
+
+<p>Thank you for reading, hope you enjoyed it! I’ll continue to update my progress via the series of blogs ;)</p>
+<p>Follow me on <a target="_blank" rel="noopener" href="https://twitter.com/ankurrap">Twitter</a> | <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ankur-patil-a112a3202/">LinkedIn</a> for more web development-related tips and posts.</p>
+<p>That’s all for today! You have read the article till the end.</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/me">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Abstract"><span class="toc-number">1.</span> <span class="toc-text">Abstract</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Implementation"><span class="toc-number">2.</span> <span class="toc-text">Implementation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Change-in-plans"><span class="toc-number">2.1.</span> <span class="toc-text">Change in plans</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Token-Authentication"><span class="toc-number">2.2.</span> <span class="toc-text">Token Authentication</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Time-Parser"><span class="toc-number">2.3.</span> <span class="toc-text">Time Parser</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Helper-Functions"><span class="toc-number">2.4.</span> <span class="toc-text">Helper Functions</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Endpoints"><span class="toc-number">3.</span> <span class="toc-text">Endpoints</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Project-Details"><span class="toc-number">4.</span> <span class="toc-text">Project Details:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future-Idea"><span class="toc-number">5.</span> <span class="toc-text">Future Idea:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Learning"><span class="toc-number">6.</span> <span class="toc-text">Learning:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Special-Thanks"><span class="toc-number">7.</span> <span class="toc-text">Special Thanks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">8.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/08/24/sob_part2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&text=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&is_video=false&description=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22&body=Check out this article: https://ankur12-16.github.io/2022/08/24/sob_part2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&title=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/08/24/sob_part2/&name=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/08/24/sob_part2/&t=Access tokens for Specter&#39;s REST API: Part 2 | Summer of Bitcoin &#39;22"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025
+    Ankur Patil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

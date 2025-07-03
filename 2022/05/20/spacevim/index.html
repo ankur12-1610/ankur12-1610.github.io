@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Introduction:All of us at some part of our software development journey has most likely heard of Vim.  Vim is a highly configurable text editor built to make creating and changing any kind of text ver">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SpaceVim as IDE">
+<meta property="og:url" content="https://ankur12-16.github.io/2022/05/20/spacevim/index.html">
+<meta property="og:site_name" content="Ankur Patil">
+<meta property="og:description" content="Introduction:All of us at some part of our software development journey has most likely heard of Vim.  Vim is a highly configurable text editor built to make creating and changing any kind of text ver">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1653031988430/God20LfHz.png">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1653032515064/zq4WBZ6O7.jpg">
+<meta property="og:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1653032458354/ALdzK8JJ5.png">
+<meta property="article:published_time" content="2022-05-19T18:30:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T19:05:55.392Z">
+<meta property="article:author" content="Ankur Patil">
+<meta property="article:tag" content="vim">
+<meta property="article:tag" content="emacs">
+<meta property="article:tag" content="text-editor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.hashnode.com/res/hashnode/image/upload/v1653031988430/God20LfHz.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/logo.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/logo.ico" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/logo.ico">
+        
+      
+    
+    <!-- title -->
+    <title>SpaceVim as IDE</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C0Y1VZ254B"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-C0Y1VZ254B');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Ankur Patil" type="application/atom+xml">
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/03/sob_part1/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/01/25/1_github_actions/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/05/20/spacevim/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/05/20/spacevim/&text=SpaceVim as IDE"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/05/20/spacevim/&is_video=false&description=SpaceVim as IDE"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpaceVim as IDE&body=Check out this article: https://ankur12-16.github.io/2022/05/20/spacevim/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/05/20/spacevim/&name=SpaceVim as IDE&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/05/20/spacevim/&t=SpaceVim as IDE"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-SpaceVim"><span class="toc-number">2.</span> <span class="toc-text">What is SpaceVim?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Difference-between-SpaceVim-and-Vim"><span class="toc-number">3.</span> <span class="toc-text">Difference between SpaceVim and Vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-use-Vim-or-specifically-SpaceVim"><span class="toc-number">4.</span> <span class="toc-text">Why use Vim or specifically SpaceVim?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#My-personal-experience-with-Vim"><span class="toc-number">4.1.</span> <span class="toc-text">My personal experience with Vim:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Installation"><span class="toc-number">5.</span> <span class="toc-text">Installation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prerequisites"><span class="toc-number">5.1.</span> <span class="toc-text">Prerequisites</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Installing-SpaceVim"><span class="toc-number">5.2.</span> <span class="toc-text">Installing SpaceVim:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">6.</span> <span class="toc-text">Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Important-shortcuts"><span class="toc-number">7.</span> <span class="toc-text">Important shortcuts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Customizing-SpaceVim-to-adapt-as-IDE-for-different-languages"><span class="toc-number">8.</span> <span class="toc-text">Customizing SpaceVim to adapt as IDE for different languages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">9.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        SpaceVim as IDE
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Ankur Patil</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2022-05-19T18:30:00.000Z" class="dt-published" itemprop="datePublished">2022-05-20</time>
+        
+      
+    </div>
+
+
+      
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/emacs/" rel="tag">emacs</a>, <a class="p-category" href="/tags/text-editor/" rel="tag">text-editor</a>, <a class="p-category" href="/tags/vim/" rel="tag">vim</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h3><p>All of us at some part of our software development journey has most likely heard of <a target="_blank" rel="noopener" href="https://www.vim.org/">Vim</a>.</p>
+<blockquote>
+<p>Vim is a highly configurable text editor built to make creating and changing any kind of text very efficient. It is included as “vi” with most UNIX systems and with Apple OS X.</p>
+</blockquote>
+<blockquote>
+<p>Vim is rock stable and is continuously being developed to become even better. Among its features are: persistent, multi-level undo tree extensive plugin system support for hundreds of programming languages and file formats powerful search and replace integrates with many tools</p>
+</blockquote>
+<p>Vim is an old school, too linux way editor, and it takes a bit of effort to do all the customizations. This is where <a target="_blank" rel="noopener" href="https://spacevim.org/">SpaceVim</a> steps in, it makes things way easier for the user.</p>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1653031988430/God20LfHz.png" alt="148374827-5f7aeaaa-e69b-441e-b872-408b47f4da04.png"></p>
+<blockquote>
+<p>SpaceVim is a distribution of the Vim editor that’s inspired by spacemacs. It manages collections of plugins in layers, which help collect related packages together to provide features. This approach helps keep configuration organized and reduces overhead for the user by keeping them from having to think about what packages to install.</p>
+</blockquote>
+<p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1653032515064/zq4WBZ6O7.jpg" alt="images.jpg"></p>
+<h3 id="What-is-SpaceVim"><a href="#What-is-SpaceVim" class="headerlink" title="What is SpaceVim?"></a>What is SpaceVim?</h3><p>SpaceVim is <code>.vim</code> in your home directory, this is the simplest explanation of SpaceVim. In general, vim will try to find <code>~/.vimrc</code> in your home directory. If there is no such file. vim will use <code>~/.vim/vimrc</code> as the init file.</p>
+<p>This is how and why SpaceVim can be loaded. If you create a <code>~/.vimrc</code> in your home directory, SpaceVim will not be loaded automatically.</p>
+<h3 id="Difference-between-SpaceVim-and-Vim"><a href="#Difference-between-SpaceVim-and-Vim" class="headerlink" title="Difference between SpaceVim and Vim"></a>Difference between SpaceVim and Vim</h3><p><img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1653032458354/ALdzK8JJ5.png" alt="1_JMgpIjHEX0vTR5CUV2uAKA.png"></p>
+<p>SpaceVim use layers to manager plugins and config. Users do not need to searching for plugins, also do not need to config them. For example, if you are a golang developer, and want to use use SpaceVim as a simple GO ide. You just need to install SpaceVim, and enable <code>lang#go</code> layer. All plugins will be downloaded automatically.</p>
+<h3 id="Why-use-Vim-or-specifically-SpaceVim"><a href="#Why-use-Vim-or-specifically-SpaceVim" class="headerlink" title="Why use Vim or specifically SpaceVim?"></a>Why use Vim or specifically SpaceVim?</h3><p>VIM is from the era when text mode was the norm, GUI wasn’t present and having a mouse was a novelty. Developers at that time didn’t have any interest in mimicking GUI in text mode. nor there were any frameworks to do so. the computer wasn’t common and the only users were either programmers or mathematicians.</p>
+<p>To create a program for such an audience in that era would result in what you see as VIM or similar. a blank screen with convoluted and absurd shortcut keys (to quit VI you press <code>:q</code> )</p>
+<p>so the VIM creators designed the app for their target audience according to what was then available- a large blank screen as the work area and various key combinations to invoke some functionality. No menus, no buttons, no progress bars etc.</p>
+<h4 id="My-personal-experience-with-Vim"><a href="#My-personal-experience-with-Vim" class="headerlink" title="My personal experience with Vim:"></a>My personal experience with Vim:</h4><p>It was problematic at first but within a day or two when I got hold of various key combinations and installed various plugins, I was able to code pretty quickly as no cursor was needed it was just a keyboard.</p>
+<h3 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h3><h4 id="Prerequisites"><a href="#Prerequisites" class="headerlink" title="Prerequisites"></a>Prerequisites</h4><ul>
+<li><p>You need to install Vim with Python support (click <a target="_blank" rel="noopener" href="https://spacevim.org/install-vim-or-neovim-with-python-support/">here</a> for the installation steps)</p>
+</li>
+<li><p>You need to have git and curl installed in your system, which are needed for downloading plugins and fonts.</p>
+</li>
+</ul>
+<h4 id="Installing-SpaceVim"><a href="#Installing-SpaceVim" class="headerlink" title="Installing SpaceVim:"></a>Installing SpaceVim:</h4><ul>
+<li><p>Linux and macOS (click <a target="_blank" rel="noopener" href="https://spacevim.org/quick-start-guide/#:~:text=the%20terminal%20configuration.-,Linux%20and%20macOS,-curl%20%2DsLf%20https">here</a>)</p>
+</li>
+<li><p>Windows (click <a target="_blank" rel="noopener" href="https://spacevim.org/quick-start-guide/#windows">here</a>)</p>
+</li>
+</ul>
+<h3 id="Configuration"><a href="#Configuration" class="headerlink" title="Configuration"></a>Configuration</h3><p>The default configuration file of SpaceVim is <code>~/.SpaceVim.d/init.toml</code>. Users can edit this file to change the configs.</p>
+<p>Here is my <code>~/.SpaceVim.d/init.toml</code> :)</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">[options]</span><br><span class="line">    # set spacevim theme. by default colorscheme layer is not loaded,</span><br><span class="line">    # if you want to use more colorscheme, please load the colorscheme</span><br><span class="line">    # layer</span><br><span class="line">    colorscheme = &quot;onedark&quot;</span><br><span class="line">    colorscheme_bg = &quot;dark&quot;</span><br><span class="line">    # Disable guicolors in basic mode, many terminal do not support 24bit</span><br><span class="line">    # true colors</span><br><span class="line">    enable_guicolors = true</span><br><span class="line">    # Disable statusline separator, if you want to use other value, please</span><br><span class="line">    # install nerd fonts</span><br><span class="line">    statusline_separator = &quot;arrow&quot;</span><br><span class="line">    statusline_iseparator = &quot;arrow&quot;</span><br><span class="line">    buffer_index_type = 4</span><br><span class="line">    enable_tabline_filetype_icon = true</span><br><span class="line">    enable_statusline_mode = false</span><br><span class="line">    file_searching_tools = [&#x27;find&#x27;, &#x27;find -not -iwholename &quot;*.git*&quot; &#x27;]</span><br><span class="line"># Enable autocomplete layer</span><br><span class="line">[[layers]]</span><br><span class="line">name = &#x27;autocomplete&#x27;</span><br><span class="line">auto_completion_return_key_behavior = &quot;complete&quot;</span><br><span class="line">auto_completion_tab_key_behavior = &quot;smart&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = &#x27;shell&#x27;</span><br><span class="line">default_position = &#x27;top&#x27;</span><br><span class="line">default_height = 30</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;ui&quot;</span><br><span class="line">  enable_scrollbar = true</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;colorscheme&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#kotlin&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#typescript&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">    name = &#x27;lang#c&#x27;</span><br><span class="line">    enable_clang_syntax_highlight = true</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#javascript&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#go&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#python&quot;</span><br><span class="line"></span><br><span class="line">[[layers]]</span><br><span class="line">name = &quot;default&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Important-shortcuts"><a href="#Important-shortcuts" class="headerlink" title="Important shortcuts"></a>Important shortcuts</h3><blockquote>
+<p>For those who are new to vim, visit <a target="_blank" rel="noopener" href="https://devhints.io/vim">https://devhints.io/vim</a> to learn basic vim commands.</p>
+</blockquote>
+<p>There are different kinds of shortcuts, start with different prefix:</p>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Prefix name</th>
+<th>Example</th>
+<th>Description</th>
+<th>More info</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>space</code></td>
+<td><code>[SPC]</code></td>
+<td><code>spc f t</code></td>
+<td>open&#x2F;close filetree</td>
+<td>just press space key and wait 1s</td>
+</tr>
+<tr>
+<td><code>s</code></td>
+<td><code>[WIN]</code></td>
+<td><code>s v</code></td>
+<td>split window, equal to <code>:split</code></td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#window-manager">link</a></td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td><code>&lt;Leader&gt;</code></td>
+<td><code>\ [0-9]</code></td>
+<td>jump to other tab or buffer</td>
+<td>just press <code>\</code> key and wait 1s</td>
+</tr>
+<tr>
+<td><code>g</code></td>
+<td>go to</td>
+<td><code>g 0</code></td>
+<td>go to first tab</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#commands-starting-with-g">link</a></td>
+</tr>
+<tr>
+<td><code>z</code></td>
+<td>fold</td>
+<td><code>z a</code></td>
+<td>toggle a fold</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#commands-starting-with-z">link</a></td>
+</tr>
+</tbody></table>
+<p>** Most frequently used shortcuts **:</p>
+<table>
+<thead>
+<tr>
+<th>Shortcuts</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Basic</td>
+<td></td>
+</tr>
+<tr>
+<td><code>h j k l</code></td>
+<td>move around</td>
+</tr>
+<tr>
+<td><code>spc</code></td>
+<td>wait 1 second to get hint for more shortcuts</td>
+</tr>
+<tr>
+<td><code>&lt;F3&gt; / spc f t</code></td>
+<td>trigger file tree</td>
+</tr>
+<tr>
+<td><code>spc t t</code></td>
+<td>Open tab manager</td>
+</tr>
+<tr>
+<td><code>F2</code></td>
+<td>Open tagbar</td>
+</tr>
+<tr>
+<td><code>&lt;Leader&gt; [1-9]</code></td>
+<td>switch to different tabs or buffers</td>
+</tr>
+<tr>
+<td><code>spc [1-9]</code></td>
+<td>switch to different windows</td>
+</tr>
+<tr>
+<td><code>ctrl j/h/k/l</code></td>
+<td>switch to different windows</td>
+</tr>
+<tr>
+<td>Filetree</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#file-tree">Link</a></td>
+</tr>
+<tr>
+<td><code>spc f o</code></td>
+<td>open file tree and locate to current directory</td>
+</tr>
+<tr>
+<td><code>s g</code></td>
+<td>open file and split window horizontally</td>
+</tr>
+<tr>
+<td><code>s v</code></td>
+<td>open file split window vertically</td>
+</tr>
+<tr>
+<td>Comment code</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#commenting">Link</a></td>
+</tr>
+<tr>
+<td><code>spc c l</code></td>
+<td>comment&#x2F;uncomment current line</td>
+</tr>
+<tr>
+<td><code>spc c p/P</code></td>
+<td>comment&#x2F;uncomment current paragraph</td>
+</tr>
+<tr>
+<td><code>spc ; [num] j</code></td>
+<td>comment <em>num</em> lines</td>
+</tr>
+<tr>
+<td>Tab Manager</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#tabline">Link</a></td>
+</tr>
+<tr>
+<td><code>spc w F</code></td>
+<td>open a new tab, equal to <code>spc t t + n</code></td>
+</tr>
+<tr>
+<td><code>spc w o</code></td>
+<td>switch tab</td>
+</tr>
+<tr>
+<td>Display</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#ui-toggles">Link</a></td>
+</tr>
+<tr>
+<td><code>spc s c</code></td>
+<td>clear search highlight</td>
+</tr>
+<tr>
+<td><code>SPC t 8</code></td>
+<td>highlight any character past the 80th column</td>
+</tr>
+<tr>
+<td><code>SPC t h h</code></td>
+<td>toggle highlight of the current line</td>
+</tr>
+<tr>
+<td><code>SPC t h c</code></td>
+<td>toggle highlight indentation current column</td>
+</tr>
+<tr>
+<td>Search</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#searching">Link</a></td>
+</tr>
+<tr>
+<td><code>spc s s</code></td>
+<td>Searching in current file</td>
+</tr>
+<tr>
+<td><code>spc s d</code></td>
+<td>Searching in current directory</td>
+</tr>
+<tr>
+<td><code>spc s b</code></td>
+<td>Searching in all loaded buffers</td>
+</tr>
+<tr>
+<td><code>spc s p</code></td>
+<td>Searching in current proj, equal to <code>spc /</code></td>
+</tr>
+<tr>
+<td>Useful shortcuts</td>
+<td><a target="_blank" rel="noopener" href="https://spacevim.org/documentation/#unimpaired-bindings">Link</a></td>
+</tr>
+<tr>
+<td><code>[ spc</code></td>
+<td>insert space above</td>
+</tr>
+<tr>
+<td><code>] spc</code></td>
+<td>insert space below</td>
+</tr>
+</tbody></table>
+<p><strong>IDE shortcuts</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Shortcuts</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>g d</code></td>
+<td>Go to function definition</td>
+</tr>
+<tr>
+<td><code>spc b f</code></td>
+<td>format code according to pep8 standard</td>
+</tr>
+<tr>
+<td><code>spc l g d</code></td>
+<td>generate docstring</td>
+</tr>
+<tr>
+<td><code>spc l r</code></td>
+<td>run code (for any language be it python or c)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Note</strong>: These are the shortcuts that I use the most there are many more that you might use. You can explore them by pressing <code>space-bar</code> in the spacevim, wait a sec and you’ll see a window which contains all kinds of shortcuts.</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/Jackiexiao/10-minutes-to-SpaceVim/blob/master/README.md">https://github.com/Jackiexiao/10-minutes-to-SpaceVim/blob/master/README.md</a> will give you a good idea about all the shortcuts do visit it :)</p>
+</blockquote>
+<h3 id="Customizing-SpaceVim-to-adapt-as-IDE-for-different-languages"><a href="#Customizing-SpaceVim-to-adapt-as-IDE-for-different-languages" class="headerlink" title="Customizing SpaceVim to adapt as IDE for different languages"></a>Customizing SpaceVim to adapt as IDE for different languages</h3><p>The trick is simple you just need to add a layer in <code>~/.SpaceVim.d/init.toml</code>of that particular language. For example if I want to use SpaceVim for python I’ll add:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[[layers]]</span><br><span class="line">  name = &quot;lang#python&quot;</span><br></pre></td></tr></table></figure>
+
+<p>Similarly for other languages they have different layers visit their guide of programming language support (click <a target="_blank" rel="noopener" href="https://spacevim.org/quick-start-guide/#:~:text=init.toml.-,Online%20tutorials,-This%20is%20a">here</a>) for more details.</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion:"></a>Conclusion:</h3><p>Thank you for reading, hope you enjoyed the article! Queries and feedback are most welcome :) kindly leave them below.</p>
+<p>Follow me on <a target="_blank" rel="noopener" href="https://twitter.com/ankurrap">Twitter</a> | <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/ankur-patil-a112a3202/">LinkedIn</a> for more web development-related tips and posts.</p>
+<p>That’s all for today! You have read the article till the end.</p>
+<iframe src="https://giphy.com/embed/AeWoyE3ZT90YM" width="480" height="202" class="giphy-embed"></iframe>
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/me">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#What-is-SpaceVim"><span class="toc-number">2.</span> <span class="toc-text">What is SpaceVim?</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Difference-between-SpaceVim-and-Vim"><span class="toc-number">3.</span> <span class="toc-text">Difference between SpaceVim and Vim</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Why-use-Vim-or-specifically-SpaceVim"><span class="toc-number">4.</span> <span class="toc-text">Why use Vim or specifically SpaceVim?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#My-personal-experience-with-Vim"><span class="toc-number">4.1.</span> <span class="toc-text">My personal experience with Vim:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Installation"><span class="toc-number">5.</span> <span class="toc-text">Installation</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Prerequisites"><span class="toc-number">5.1.</span> <span class="toc-text">Prerequisites</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Installing-SpaceVim"><span class="toc-number">5.2.</span> <span class="toc-text">Installing SpaceVim:</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Configuration"><span class="toc-number">6.</span> <span class="toc-text">Configuration</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Important-shortcuts"><span class="toc-number">7.</span> <span class="toc-text">Important shortcuts</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Customizing-SpaceVim-to-adapt-as-IDE-for-different-languages"><span class="toc-number">8.</span> <span class="toc-text">Customizing SpaceVim to adapt as IDE for different languages</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conclusion"><span class="toc-number">9.</span> <span class="toc-text">Conclusion:</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://ankur12-16.github.io/2022/05/20/spacevim/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://ankur12-16.github.io/2022/05/20/spacevim/&text=SpaceVim as IDE"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://ankur12-16.github.io/2022/05/20/spacevim/&is_video=false&description=SpaceVim as IDE"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=SpaceVim as IDE&body=Check out this article: https://ankur12-16.github.io/2022/05/20/spacevim/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://ankur12-16.github.io/2022/05/20/spacevim/&title=SpaceVim as IDE"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://ankur12-16.github.io/2022/05/20/spacevim/&name=SpaceVim as IDE&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://ankur12-16.github.io/2022/05/20/spacevim/&t=SpaceVim as IDE"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025
+    Ankur Patil
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/me">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/ankur12-1610/">Projects</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1C7v-g-WZVMngEwy1-bEs6sY5ECsiuvC2/view">Resume</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
