@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Ankur Patil</title>
   
-  <subtitle>SDE @ Dream11 | MnC @ IIT (BHU) Varanasi</subtitle>
+  <subtitle>SDE @ Uber | ex-Dream11 | MnC @ IIT (BHU) Varanasi</subtitle>
   <link href="https://ankur12-16.github.io/atom.xml" rel="self"/>
   
   <link href="https://ankur12-16.github.io/"/>
@@ -58,9 +58,9 @@
     
     
     
-    <category term="LFX Mentorship" scheme="https://ankur12-16.github.io/tags/LFX-Mentorship/"/>
-    
     <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    
+    <category term="LFX Mentorship" scheme="https://ankur12-16.github.io/tags/LFX-Mentorship/"/>
     
     <category term="Kubernetes" scheme="https://ankur12-16.github.io/tags/Kubernetes/"/>
     
@@ -88,7 +88,7 @@
     
     
     
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
@@ -98,7 +98,7 @@
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
     
-    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
@@ -120,7 +120,7 @@
     
     
     
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
@@ -130,7 +130,7 @@
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
     
-    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
@@ -152,7 +152,7 @@
     
     
     
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
@@ -162,7 +162,7 @@
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
     
-    <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
