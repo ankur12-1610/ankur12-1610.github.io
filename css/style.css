@@ -1088,6 +1088,52 @@ body {
 .project-list .project-item p {
   display: inline;
 }
+.about-flex {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2rem;
+}
+@media (min-width: 540px) {
+  .about-flex {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+.about-text {
+  flex: 1 1 0;
+  min-width: 0;
+}
+@media (min-width: 540px) {
+  .about-text {
+    order: 1;
+  }
+}
+.about-photo-wrap {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+@media (min-width: 540px) {
+  .about-photo-wrap {
+    order: 2;
+    flex: 0 0 160px;
+  }
+}
+@media (max-width: 539px) {
+  .about-photo-wrap {
+    width: 40%;
+    max-width: 160px;
+    margin: 0 auto;
+  }
+}
+.about-photo {
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
 article header .posttitle {
   margin-top: 0;
   margin-bottom: 0;
