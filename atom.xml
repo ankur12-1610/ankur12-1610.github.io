@@ -58,9 +58,9 @@
     
     
     
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
-    
     <category term="LFX Mentorship" scheme="https://ankur12-16.github.io/tags/LFX-Mentorship/"/>
+    
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
     <category term="Kubernetes" scheme="https://ankur12-16.github.io/tags/Kubernetes/"/>
     
@@ -90,6 +90,8 @@
     
     <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
     <category term="Flask Framework" scheme="https://ankur12-16.github.io/tags/Flask-Framework/"/>
@@ -97,8 +99,6 @@
     <category term="Bitcoin" scheme="https://ankur12-16.github.io/tags/Bitcoin/"/>
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
-    
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
@@ -122,6 +122,8 @@
     
     <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
     <category term="Flask Framework" scheme="https://ankur12-16.github.io/tags/Flask-Framework/"/>
@@ -129,8 +131,6 @@
     <category term="Bitcoin" scheme="https://ankur12-16.github.io/tags/Bitcoin/"/>
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
-    
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
@@ -154,6 +154,8 @@
     
     <category term="JWT" scheme="https://ankur12-16.github.io/tags/JWT/"/>
     
+    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
+    
     <category term="Summer of Bitcoin" scheme="https://ankur12-16.github.io/tags/Summer-of-Bitcoin/"/>
     
     <category term="Flask Framework" scheme="https://ankur12-16.github.io/tags/Flask-Framework/"/>
@@ -161,8 +163,6 @@
     <category term="Bitcoin" scheme="https://ankur12-16.github.io/tags/Bitcoin/"/>
     
     <category term="REST API" scheme="https://ankur12-16.github.io/tags/REST-API/"/>
-    
-    <category term="Open Source" scheme="https://ankur12-16.github.io/tags/Open-Source/"/>
     
   </entry>
   
